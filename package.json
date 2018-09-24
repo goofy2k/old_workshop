@@ -1,0 +1,12 @@
+{
+    "name": "Old_workshop",
+    "description": "Post mortem workshop flows after crash of 180921 DO NOT DEPLOY, especially MyForm",
+    "version": "0.0.1",
+    "dependencies": {},
+    "node-red": {
+        "settings": {
+            "flowFile": "flow.json",
+            "credentialsFile": "flow_cred.json"
+        }
+    }
+}
