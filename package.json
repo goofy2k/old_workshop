@@ -2,7 +2,13 @@
     "name": "Old_workshop",
     "description": "Post mortem workshop flows after crash of 180921 DO NOT DEPLOY, especially MyForm",
     "version": "0.0.1",
-    "dependencies": {},
+    "dependencies": {
+        "node-red-contrib-cpu": "0.0.2",
+        "node-red-contrib-os": "0.1.7",
+        "node-red-contrib-play-audio": "2.2.3",
+        "node-red-node-email": "0.1.29",
+        "node-red-node-random": "0.1.0"
+    },
     "node-red": {
         "settings": {
             "flowFile": "flow.json",
