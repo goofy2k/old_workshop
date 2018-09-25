@@ -7,7 +7,17 @@
         "node-red-contrib-os": "0.1.7",
         "node-red-contrib-play-audio": "2.2.3",
         "node-red-node-email": "0.1.29",
-        "node-red-node-random": "0.1.0"
+        "node-red-node-random": "0.1.0",
+        "node-red-contrib-counter": "0.1.5",
+        "node-red-contrib-delta-timed": "0.3.0",
+        "node-red-dashboard": "2.9.8",
+        "node-red-node-mysql": "0.0.17",
+        "node-red-contrib-huemagic": "1.5.6",
+        "node-red-contrib-web-worldmap": "1.4.3",
+        "node-red-contrib-googlechart": "0.0.10",
+        "node-red-contrib-regression": "1.0.0",
+        "node-red-contrib-statistics": "2.2.2",
+        "node-red-contrib-ttn": "2.0.4"
     },
     "node-red": {
         "settings": {
