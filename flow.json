@@ -11073,8 +11073,8 @@
         "console": false,
         "tostatus": false,
         "complete": "topic",
-        "x": 1000,
-        "y": 720,
+        "x": 980,
+        "y": 740,
         "wires": []
     },
     {
@@ -11540,7 +11540,7 @@
         "repeat": "3600",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "10",
         "x": 240,
         "y": 100,
         "wires": [
@@ -11554,30 +11554,14 @@
         "type": "debug",
         "z": "61eab748.c2a598",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 890,
-        "y": 200,
+        "x": 910,
+        "y": 100,
         "wires": []
-    },
-    {
-        "id": "e38da8c3.e09f98",
-        "type": "function",
-        "z": "61eab748.c2a598",
-        "name": "",
-        "func": "msg.chart.data.push(msg.payload);\nmsg.chart.series.push(\"10-000802541aac\");\nmsg.chart.labels.push(\"10-000802541aac\");\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 890,
-        "y": 160,
-        "wires": [
-            [
-                "268bc9ad.bd0e66"
-            ]
-        ]
     },
     {
         "id": "30b17d61.d5b2c2",
@@ -11587,30 +11571,11 @@
         "func": "var mychart = {\"data\":[],\"labels\":[],\"series\":[]};\nmsg.chart = mychart;\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 490,
+        "x": 530,
         "y": 100,
         "wires": [
             [
-                "236fad8e.d2f7e2"
-            ]
-        ]
-    },
-    {
-        "id": "236fad8e.d2f7e2",
-        "type": "template",
-        "z": "61eab748.c2a598",
-        "name": "LIST readings",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT UNIX_TIMESTAMP(datetime)*1000 AS \"x\", temperature AS \"y\" FROM tsensors WHERE (sensor_id = \"10-000802541aac\");\n",
-        "output": "str",
-        "x": 500,
-        "y": 160,
-        "wires": [
-            [
-                "7f3435a8.0e281c"
+                "bc84d103.6217a"
             ]
         ]
     },
@@ -11619,7 +11584,7 @@
         "type": "debug",
         "z": "61eab748.c2a598",
         "name": "",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -11629,27 +11594,11 @@
         "wires": []
     },
     {
-        "id": "3b2cd005.29cc5",
-        "type": "function",
-        "z": "61eab748.c2a598",
-        "name": "INJECT CHART DATA INTO CHART OBJECT",
-        "func": "msg.chart.data.push(msg.payload);\nmsg.chart.series.push(\"10-000802541aac\");\nmsg.chart.labels.push(\"10-000802541aac\");\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 1000,
-        "y": 280,
-        "wires": [
-            [
-                "b7359d32.d86eb"
-            ]
-        ]
-    },
-    {
         "id": "68604a02.761924",
         "type": "debug",
         "z": "61eab748.c2a598",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -11657,25 +11606,6 @@
         "x": 1290,
         "y": 220,
         "wires": []
-    },
-    {
-        "id": "268bc9ad.bd0e66",
-        "type": "template",
-        "z": "61eab748.c2a598",
-        "name": "LIST readings",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT UNIX_TIMESTAMP(datetime)*1000 AS \"x\", temperature AS \"y\" FROM tsensors WHERE (sensor_id = \"10-0008029056ee\");\n",
-        "output": "str",
-        "x": 500,
-        "y": 280,
-        "wires": [
-            [
-                "8c7fda32.1cd7a8"
-            ]
-        ]
     },
     {
         "id": "b7359d32.d86eb",
@@ -12437,11 +12367,11 @@
         "type": "function",
         "z": "61eab748.c2a598",
         "name": "10-0008029056ee 10-000802541aac",
-        "func": "msg.payload = [\"10-0008029056ee\", \"10-000802541aac\"];\n\nreturn msg;",
+        "func": "msg.payload = [\"10-000802541aac\", \"10-0008029056ee\"];\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 230,
-        "y": 526,
+        "y": 500,
         "wires": [
             [
                 "e6f5904d.dae9d"
@@ -12459,12 +12389,11 @@
         "repeat": "3600",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "10",
         "x": 300,
         "y": 413,
         "wires": [
             [
-                "dcb35580.38bba8",
                 "7be80d0d.191c84"
             ]
         ]
@@ -12716,7 +12645,7 @@
         "type": "debug",
         "z": "61eab748.c2a598",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -12864,7 +12793,7 @@
         "type": "debug",
         "z": "61eab748.c2a598",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -12902,22 +12831,6 @@
         "wires": [
             [
                 "4660c90c.67d9f8"
-            ]
-        ]
-    },
-    {
-        "id": "dcb35580.38bba8",
-        "type": "function",
-        "z": "61eab748.c2a598",
-        "name": "10-0008029056ee",
-        "func": "msg.payload = [\"10-0008029056ee\"];\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 170,
-        "y": 560,
-        "wires": [
-            [
-                "e6f5904d.dae9d"
             ]
         ]
     },
@@ -16654,7 +16567,7 @@
         "type": "debug",
         "z": "599e8aab.a9ec84",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -21431,8 +21344,8 @@
         "z": "8677ca10.1eb128",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 1120,
-        "y": 540,
+        "x": 1140,
+        "y": 560,
         "wires": [
             [
                 "fbf6fee.5cf6b",
@@ -21538,7 +21451,7 @@
         "wires": [
             [
                 "41c9f156.f10df",
-                "e38da8c3.e09f98"
+                "f048cd4f.44ce6"
             ]
         ]
     },
@@ -21553,7 +21466,7 @@
         "wires": [
             [
                 "cdf73133.76d9d",
-                "3b2cd005.29cc5"
+                "8034d571.cd9aa8"
             ]
         ]
     },
@@ -23868,27 +23781,6 @@
         ]
     },
     {
-        "id": "1dcf3f9a.261c4",
-        "type": "ui_slider",
-        "z": "8677ca10.1eb128",
-        "name": "",
-        "label": "slider",
-        "group": "c561f1ec.8c0a8",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "topic": "",
-        "min": 0,
-        "max": 10,
-        "step": 1,
-        "x": 130,
-        "y": 380,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "a15feab2.72a7e8",
         "type": "ui_chart",
         "z": "3f7b5fe2.56b48",
@@ -25229,7 +25121,7 @@
         "order": 2,
         "width": 0,
         "height": 0,
-        "label": "Garage",
+        "label": "Temperatuur CV ruimte",
         "chartType": "line",
         "legend": "true",
         "xformat": "HH:mm:ss",
@@ -25255,8 +25147,8 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1023,
-        "y": 305,
+        "x": 1080,
+        "y": 280,
         "wires": [
             [],
             []
@@ -25266,12 +25158,12 @@
         "id": "262e915a.516f0e",
         "type": "ui_chart",
         "z": "8677ca10.1eb128",
-        "name": "Chart Temperatuur CV ruimte",
+        "name": "Chart Temperatuur CV leiding",
         "group": "72d44185.11ae4",
         "order": 3,
         "width": 0,
         "height": 0,
-        "label": "Buitenkraan",
+        "label": "Temperatuur CV leiding",
         "chartType": "line",
         "legend": "true",
         "xformat": "HH:mm:ss",
@@ -25297,7 +25189,7 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1025,
+        "x": 1035,
         "y": 406,
         "wires": [
             [],
@@ -26677,24 +26569,6 @@
         ]
     },
     {
-        "id": "d1f53ad3.5cfc68",
-        "type": "ui_date_picker",
-        "z": "8677ca10.1eb128",
-        "name": "",
-        "label": "date",
-        "group": "c561f1ec.8c0a8",
-        "order": 0,
-        "width": 0,
-        "height": 0,
-        "passthru": true,
-        "topic": "",
-        "x": 120,
-        "y": 440,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "2d3b15cf.8d46aa",
         "type": "ui_template",
         "z": "3f8254e2.b5957c",
@@ -27604,7 +27478,8 @@
         "wires": [
             [
                 "c68bf26c.155af",
-                "4e67564e.8620a8"
+                "4e67564e.8620a8",
+                "dded1d97.86c1f"
             ],
             [
                 "355c74ca.018ddc"
@@ -28421,6 +28296,107 @@
         "wires": [
             [
                 "d547dcf8.35c99"
+            ]
+        ]
+    },
+    {
+        "id": "dded1d97.86c1f",
+        "type": "ui_slider",
+        "z": "599e8aab.a9ec84",
+        "name": "",
+        "label": "Seconds since last readout",
+        "group": "95145073.824d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "topic": "",
+        "min": 0,
+        "max": "60",
+        "step": 1,
+        "x": 1308.5555419921875,
+        "y": 647.7777709960938,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8aa97bc4.c326b8",
+        "type": "comment",
+        "z": "61eab748.c2a598",
+        "name": "BOTH LABELS ARE THE SAME",
+        "info": "",
+        "x": 1410,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "bc84d103.6217a",
+        "type": "template",
+        "z": "61eab748.c2a598",
+        "name": "LIST readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT UNIX_TIMESTAMP(datetime)*1000 AS \"x\", temperature AS \"y\" FROM tsensors WHERE (sensor_id = \"10-000802541aac\");\n",
+        "output": "str",
+        "x": 440,
+        "y": 160,
+        "wires": [
+            [
+                "7f3435a8.0e281c"
+            ]
+        ]
+    },
+    {
+        "id": "f048cd4f.44ce6",
+        "type": "function",
+        "z": "61eab748.c2a598",
+        "name": "INJECT CHART DATA INTO CHART OBJECT",
+        "func": "msg.chart.data.push(msg.payload);\nmsg.chart.series.push(\"10-000802541aac\");\nmsg.chart.labels.push(\"10-000802541aac\");\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 920,
+        "y": 200,
+        "wires": [
+            [
+                "1d5439ba.1b03d6"
+            ]
+        ]
+    },
+    {
+        "id": "1d5439ba.1b03d6",
+        "type": "template",
+        "z": "61eab748.c2a598",
+        "name": "LIST readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT UNIX_TIMESTAMP(datetime)*1000 AS \"x\", temperature AS \"y\" FROM tsensors WHERE (sensor_id = \"10-0008029056ee\");\n",
+        "output": "str",
+        "x": 380,
+        "y": 280,
+        "wires": [
+            [
+                "8c7fda32.1cd7a8"
+            ]
+        ]
+    },
+    {
+        "id": "8034d571.cd9aa8",
+        "type": "function",
+        "z": "61eab748.c2a598",
+        "name": "",
+        "func": "msg.chart.data.push(msg.payload);\nmsg.chart.series.push(\"10-0008029056ee\");\nmsg.chart.labels.push(\"10-0008029056ee\");\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 915,
+        "y": 282,
+        "wires": [
+            [
+                "b7359d32.d86eb"
             ]
         ]
     }
