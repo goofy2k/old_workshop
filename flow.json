@@ -26990,7 +26990,7 @@
         "repeat": "60",
         "crontab": "",
         "once": true,
-        "onceDelay": 0.1,
+        "onceDelay": "4",
         "x": 180,
         "y": 200,
         "wires": [
@@ -27053,7 +27053,7 @@
         "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.5",
+        "onceDelay": "2",
         "x": 170,
         "y": 80,
         "wires": [
@@ -27135,18 +27135,8 @@
         "console": false,
         "tostatus": false,
         "complete": "true",
-        "x": 1000,
+        "x": 1020,
         "y": 240,
-        "wires": []
-    },
-    {
-        "id": "4824dbc0.973b54",
-        "type": "comment",
-        "z": "7329e9b3.909368",
-        "name": "Do peak detection and shaving on database data in different flow",
-        "info": "",
-        "x": 890,
-        "y": 460,
         "wires": []
     },
     {
@@ -27155,91 +27145,8 @@
         "z": "7329e9b3.909368",
         "name": "Do it for furrent data (E only, consumed, peak+non_peak)",
         "info": "",
-        "x": 990,
+        "x": 890,
         "y": 740,
-        "wires": []
-    },
-    {
-        "id": "52b5e3d2.fe00ec",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "GRAPH",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 142.85714721679688,
-        "y": 416.03173828125,
-        "wires": [
-            [
-                "e531d221.9363e"
-            ]
-        ]
-    },
-    {
-        "id": "e531d221.9363e",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "LIST readings",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT timestamp_*1000 AS \"x\", power as \"y\" FROM epower;",
-        "output": "str",
-        "x": 312.8571472167969,
-        "y": 416.03173828125,
-        "wires": [
-            [
-                "1f44a886.7b88b7"
-            ]
-        ]
-    },
-    {
-        "id": "15851cf4.c20463",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 510,
-        "y": 460,
-        "wires": []
-    },
-    {
-        "id": "2f9311f6.9a873e",
-        "type": "function",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 550,
-        "y": 420,
-        "wires": [
-            [
-                "b562fa51.2d0fe8"
-            ]
-        ]
-    },
-    {
-        "id": "b562fa51.2d0fe8",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "x": 690,
-        "y": 420,
         "wires": []
     },
     {
@@ -27248,8 +27155,8 @@
         "z": "7329e9b3.909368",
         "name": "PLOT database content",
         "info": "",
-        "x": 180,
-        "y": 340,
+        "x": 140,
+        "y": 280,
         "wires": []
     },
     {
@@ -27264,7 +27171,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 290,
+        "x": 190,
         "y": 860,
         "wires": [
             [
@@ -27283,7 +27190,7 @@
         "syntax": "mustache",
         "template": "DROP TABLE practice;\n",
         "output": "str",
-        "x": 460,
+        "x": 360,
         "y": 860,
         "wires": [
             [
@@ -27301,8 +27208,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 1070,
-        "y": 880,
+        "x": 1250,
+        "y": 800,
         "wires": []
     },
     {
@@ -27313,7 +27220,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 1030,
+        "x": 930,
         "y": 800,
         "wires": [
             [
@@ -27329,7 +27236,7 @@
         "property": "payload",
         "action": "",
         "pretty": false,
-        "x": 1190,
+        "x": 1090,
         "y": 800,
         "wires": [
             [
@@ -27349,7 +27256,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 259,
+        "x": 159,
         "y": 808.4444580078125,
         "wires": [
             [
@@ -27368,7 +27275,7 @@
         "syntax": "mustache",
         "template": "CREATE TABLE IF NOT EXISTS practice AS\n   SELECT *\n   FROM epower2;",
         "output": "str",
-        "x": 509,
+        "x": 409,
         "y": 808.4444580078125,
         "wires": [
             [
@@ -27382,7 +27289,7 @@
         "z": "7329e9b3.909368",
         "name": "create TABLE practice as sandbox for manipulations",
         "info": "",
-        "x": 390,
+        "x": 290,
         "y": 740,
         "wires": []
     },
@@ -27398,7 +27305,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 230,
+        "x": 170,
         "y": 1040,
         "wires": [
             [
@@ -27417,7 +27324,7 @@
         "syntax": "mustache",
         "template": "SELECT * FROM practice;",
         "output": "str",
-        "x": 450,
+        "x": 390,
         "y": 1040,
         "wires": [
             [
@@ -27436,7 +27343,7 @@
         "syntax": "mustache",
         "template": "SELECT COUNT(*) FROM practice;",
         "output": "str",
-        "x": 460,
+        "x": 400,
         "y": 1100,
         "wires": [
             [
@@ -27454,7 +27361,7 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 1050,
+        "x": 990,
         "y": 1040,
         "wires": []
     },
@@ -27470,7 +27377,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 230,
+        "x": 170,
         "y": 1100,
         "wires": [
             [
@@ -27488,7 +27395,7 @@
         "console": false,
         "tostatus": false,
         "complete": "payload[0].COUNT(*)",
-        "x": 1100,
+        "x": 1040,
         "y": 1100,
         "wires": []
     },
@@ -27502,48 +27409,9 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 1050,
+        "x": 1610,
         "y": 1220,
         "wires": []
-    },
-    {
-        "id": "39c6b23d.c524fe",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "COUNT practice",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT COUNT(*) FROM practice WHERE DATEDIFF(timestamp, (SELECT MIN(timestamp) FROM practice)) > 14;",
-        "output": "str",
-        "x": 460,
-        "y": 1160,
-        "wires": [
-            [
-                "1f52b63e.5a531a"
-            ]
-        ]
-    },
-    {
-        "id": "ba300b12.137de8",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "COUNT OLDER THAN",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 220,
-        "y": 1160,
-        "wires": [
-            [
-                "39c6b23d.c524fe"
-            ]
-        ]
     },
     {
         "id": "a8fb928e.e48cd",
@@ -27557,7 +27425,7 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 220,
+        "x": 780,
         "y": 1220,
         "wires": [
             [
@@ -27576,7 +27444,7 @@
         "syntax": "mustache",
         "template": "DELETE FROM practice (SELECT * FROM practice WHERE DATEDIFF(timestamp, (SELECT MIN(timestamp) FROM practice)) > 14);",
         "output": "str",
-        "x": 510,
+        "x": 1070,
         "y": 1220,
         "wires": [
             [
@@ -27590,7 +27458,7 @@
         "z": "7329e9b3.909368",
         "name": "Cannot use aggregates from a table in a WHERE clause acting on the same table. ",
         "info": "",
-        "x": 380,
+        "x": 940,
         "y": 1280,
         "wires": []
     },
@@ -27605,7 +27473,7 @@
         "syntax": "mustache",
         "template": "CREATE TABLE temp_practice AS\n   SELECT *\n   FROM practice;\n\nDELETE FROM practice WHERE DATEDIFF(timestamp, (SELECT MIN(timestamp) FROM temp_practice)) > 14;\nDROP TABLE temp_practice;",
         "output": "str",
-        "x": 510,
+        "x": 1070,
         "y": 1340,
         "wires": [
             [
@@ -27625,27 +27493,13 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 220,
+        "x": 780,
         "y": 1340,
         "wires": [
             [
                 "9b25bfd3.0472b"
             ]
         ]
-    },
-    {
-        "id": "f78881b1.28c98",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload[0].COUNT(*)",
-        "x": 1100,
-        "y": 1160,
-        "wires": []
     },
     {
         "id": "8d2fb98f.74a288",
@@ -27659,8 +27513,8 @@
         "crontab": "",
         "once": true,
         "onceDelay": "4",
-        "x": 320,
-        "y": 540,
+        "x": 180,
+        "y": 360,
         "wires": [
             [
                 "b55369c5.145038"
@@ -27678,8 +27532,8 @@
         "syntax": "mustache",
         "template": "SELECT timestamp AS \"x\", power as \"y\" FROM epower2;",
         "output": "str",
-        "x": 460,
-        "y": 540,
+        "x": 360,
+        "y": 360,
         "wires": [
             [
                 "8bdf29ca.c04858"
@@ -27696,8 +27550,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 670,
-        "y": 600,
+        "x": 570,
+        "y": 420,
         "wires": []
     },
     {
@@ -27708,8 +27562,8 @@
         "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 890,
-        "y": 540,
+        "x": 790,
+        "y": 360,
         "wires": [
             [
                 "28a672d7.9475ce",
@@ -27727,91 +27581,8 @@
         "console": false,
         "tostatus": false,
         "complete": "true",
-        "x": 1140,
-        "y": 540,
-        "wires": []
-    },
-    {
-        "id": "1dcb0888.390fb7",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "GRAPH",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 250,
-        "y": 1420,
-        "wires": [
-            [
-                "dabf7fcb.dae67"
-            ]
-        ]
-    },
-    {
-        "id": "dabf7fcb.dae67",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "LIST readings",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT timestamp AS \"x\", power as \"y\" FROM practice;",
-        "output": "str",
-        "x": 420,
-        "y": 1420,
-        "wires": [
-            [
-                "f4e28cce.10e6"
-            ]
-        ]
-    },
-    {
-        "id": "4eadf8ad.d00ff8",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 577.1428527832031,
-        "y": 1483.96826171875,
-        "wires": []
-    },
-    {
-        "id": "2cb184b4.53a6cc",
-        "type": "function",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "x": 630,
-        "y": 1420,
-        "wires": [
-            [
-                "b5b5f662.170e18"
-            ]
-        ]
-    },
-    {
-        "id": "b5b5f662.170e18",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "x": 770,
-        "y": 1420,
+        "x": 1040,
+        "y": 360,
         "wires": []
     },
     {
@@ -27820,8 +27591,8 @@
         "z": "7329e9b3.909368",
         "name": "Placeholder for graphing data from table practice",
         "info": "",
-        "x": 300,
-        "y": 1580,
+        "x": 240,
+        "y": 920,
         "wires": []
     },
     {
@@ -27836,8 +27607,8 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 850,
-        "y": 600,
+        "x": 750,
+        "y": 420,
         "wires": [
             [
                 "88a47fe1.84c84"
@@ -27852,26 +27623,11 @@
         "func": "msg.payload = [];\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 990,
-        "y": 600,
+        "x": 890,
+        "y": 420,
         "wires": [
             [
                 "7c3c8a1b.feb054"
-            ]
-        ]
-    },
-    {
-        "id": "1f44a886.7b88b7",
-        "type": "mysql",
-        "z": "7329e9b3.909368",
-        "mydb": "f524d036.2b55a",
-        "name": "MYSQL db example ",
-        "x": 280,
-        "y": 480,
-        "wires": [
-            [
-                "15851cf4.c20463",
-                "2f9311f6.9a873e"
             ]
         ]
     },
@@ -27881,7 +27637,7 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 820,
+        "x": 720,
         "y": 800,
         "wires": [
             [
@@ -27895,7 +27651,7 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 820,
+        "x": 760,
         "y": 1040,
         "wires": [
             [
@@ -27909,7 +27665,7 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 820,
+        "x": 760,
         "y": 1100,
         "wires": [
             [
@@ -27923,25 +27679,11 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 820,
+        "x": 1380,
         "y": 1220,
         "wires": [
             [
                 "e53387b0.504bf8"
-            ]
-        ]
-    },
-    {
-        "id": "1f52b63e.5a531a",
-        "type": "mysql",
-        "z": "7329e9b3.909368",
-        "mydb": "f524d036.2b55a",
-        "name": "MYSQL db example ",
-        "x": 820,
-        "y": 1160,
-        "wires": [
-            [
-                "f78881b1.28c98"
             ]
         ]
     },
@@ -27951,27 +27693,12 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 680,
-        "y": 540,
+        "x": 580,
+        "y": 360,
         "wires": [
             [
                 "84f3bb44.00c098",
                 "483a36f9.89a268"
-            ]
-        ]
-    },
-    {
-        "id": "f4e28cce.10e6",
-        "type": "mysql",
-        "z": "7329e9b3.909368",
-        "mydb": "f524d036.2b55a",
-        "name": "MYSQL db example ",
-        "x": 387.1428527832031,
-        "y": 1483.96826171875,
-        "wires": [
-            [
-                "4eadf8ad.d00ff8",
-                "2cb184b4.53a6cc"
             ]
         ]
     },
@@ -28010,8 +27737,8 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1200,
-        "y": 600,
+        "x": 1100,
+        "y": 420,
         "wires": [
             [],
             []
@@ -28028,8 +27755,8 @@
         "syntax": "mustache",
         "template": "SELECT timestamp AS \"x\", power as \"y\" FROM practice;",
         "output": "str",
-        "x": 433,
-        "y": 1640,
+        "x": 373,
+        "y": 980,
         "wires": [
             [
                 "ef5103f5.4da0f"
@@ -28046,8 +27773,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 630,
-        "y": 1580,
+        "x": 570,
+        "y": 920,
         "wires": []
     },
     {
@@ -28058,8 +27785,8 @@
         "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 863,
-        "y": 1640,
+        "x": 803,
+        "y": 980,
         "wires": [
             [
                 "9540fee3.6d732",
@@ -28077,8 +27804,8 @@
         "console": false,
         "tostatus": false,
         "complete": "true",
-        "x": 1050,
-        "y": 1640,
+        "x": 990,
+        "y": 980,
         "wires": []
     },
     {
@@ -28093,8 +27820,8 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 830,
-        "y": 1580,
+        "x": 770,
+        "y": 920,
         "wires": [
             [
                 "1962d703.6d5529"
@@ -28109,8 +27836,8 @@
         "func": "msg.payload = [];\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 950,
-        "y": 1580,
+        "x": 890,
+        "y": 920,
         "wires": [
             [
                 "21b272a1.45412e"
@@ -28123,8 +27850,8 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 653,
-        "y": 1640,
+        "x": 593,
+        "y": 980,
         "wires": [
             [
                 "d8e17a2e.06f9a8",
@@ -28167,8 +27894,8 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1130,
-        "y": 1580,
+        "x": 1070,
+        "y": 920,
         "wires": [
             [],
             []
@@ -28186,8 +27913,8 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 220,
-        "y": 1640,
+        "x": 180,
+        "y": 980,
         "wires": [
             [
                 "7dc90e23.956de"
@@ -28205,345 +27932,6 @@
         "wires": []
     },
     {
-        "id": "a555f542.11da28",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "COUNT More than N hours ago",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT COUNT(*) FROM practice WHERE (DATE_ADD(timestamp, INTERVAL 33 HOUR) < NOW());",
-        "output": "str",
-        "x": 470,
-        "y": 1840,
-        "wires": [
-            [
-                "b3d68eec.5d068"
-            ]
-        ]
-    },
-    {
-        "id": "e25632b9.533f",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 200,
-        "y": 1840,
-        "wires": [
-            [
-                "a555f542.11da28"
-            ]
-        ]
-    },
-    {
-        "id": "b3d68eec.5d068",
-        "type": "mysql",
-        "z": "7329e9b3.909368",
-        "mydb": "f524d036.2b55a",
-        "name": "MYSQL db example ",
-        "x": 750,
-        "y": 1840,
-        "wires": [
-            [
-                "ae334c3b.a9742",
-                "5ca934d3.cc339c"
-            ]
-        ]
-    },
-    {
-        "id": "ae334c3b.a9742",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload[0].COUNT(*)",
-        "x": 1010,
-        "y": 1840,
-        "wires": []
-    },
-    {
-        "id": "485c0695.d98338",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "COUNT Less than N hours ago",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT COUNT(*) FROM practice WHERE (DATE_ADD(timestamp, INTERVAL 33 HOUR) > NOW());",
-        "output": "str",
-        "x": 470,
-        "y": 1881,
-        "wires": [
-            [
-                "b3d68eec.5d068"
-            ]
-        ]
-    },
-    {
-        "id": "a756e3d8.78cd",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "COUNT All",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT COUNT(*) FROM practice;",
-        "output": "str",
-        "x": 410,
-        "y": 1921,
-        "wires": [
-            [
-                "b3d68eec.5d068"
-            ]
-        ]
-    },
-    {
-        "id": "1a3cc3d.55bb13c",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "timestamp",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 200,
-        "y": 2096,
-        "wires": [
-            [
-                "ab7466e2.d91ec8"
-            ]
-        ]
-    },
-    {
-        "id": "ff080ab2.2adec8",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 200,
-        "y": 1880,
-        "wires": [
-            [
-                "485c0695.d98338"
-            ]
-        ]
-    },
-    {
-        "id": "1c50c7c5.879958",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 200,
-        "y": 1920,
-        "wires": [
-            [
-                "a756e3d8.78cd"
-            ]
-        ]
-    },
-    {
-        "id": "ab7466e2.d91ec8",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "SELECT More than N hours ago GROUP BY HOUR",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT timestamp, COUNT(*) AS count , MAX(power) AS max,MIN(power), SUM(power), AVG(power) FROM practice WHERE (DATE_ADD(timestamp, INTERVAL 13 HOUR) < NOW()) GROUP BY HOUR(timestamp);",
-        "output": "str",
-        "x": 540,
-        "y": 2096,
-        "wires": [
-            [
-                "fd71e2e8.d74f8"
-            ]
-        ]
-    },
-    {
-        "id": "fd71e2e8.d74f8",
-        "type": "mysql",
-        "z": "7329e9b3.909368",
-        "mydb": "f524d036.2b55a",
-        "name": "MYSQL db example ",
-        "x": 960,
-        "y": 2096,
-        "wires": [
-            [
-                "e4d1a8ec.c314f8",
-                "14549ef4.b60991"
-            ]
-        ]
-    },
-    {
-        "id": "e4d1a8ec.c314f8",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload[0].COUNT(*)",
-        "x": 1210,
-        "y": 2096,
-        "wires": []
-    },
-    {
-        "id": "a4e11a91.daa818",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "timestamp",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 200,
-        "y": 2136,
-        "wires": [
-            [
-                "4b0afdfd.e65164"
-            ]
-        ]
-    },
-    {
-        "id": "97aae7e4.a4afe8",
-        "type": "inject",
-        "z": "7329e9b3.909368",
-        "name": "timestamp",
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "x": 200,
-        "y": 2176,
-        "wires": [
-            [
-                "9ac97df9.885d3"
-            ]
-        ]
-    },
-    {
-        "id": "4b0afdfd.e65164",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "SELECT Less than N hours ago GROUP BY HOUR",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT timestamp, COUNT(*), MAX(power),MIN(power), SUM(power), AVG(power) FROM practice WHERE (DATE_ADD(timestamp, INTERVAL 13 HOUR) > NOW()) GROUP BY HOUR(timestamp);",
-        "output": "str",
-        "x": 530,
-        "y": 2136,
-        "wires": [
-            [
-                "fd71e2e8.d74f8"
-            ]
-        ]
-    },
-    {
-        "id": "9ac97df9.885d3",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "SELECT All GROUP BY HOUR",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT timestamp, COUNT(*), MAX(power), MIN(power), SUM(power),AVG(power) FROM practice GROUP BY HOUR(timestamp);",
-        "output": "str",
-        "x": 470,
-        "y": 2176,
-        "wires": [
-            [
-                "fd71e2e8.d74f8"
-            ]
-        ]
-    },
-    {
-        "id": "14549ef4.b60991",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "x": 1150,
-        "y": 2156,
-        "wires": []
-    },
-    {
-        "id": "5ca934d3.cc339c",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "x": 950,
-        "y": 1880,
-        "wires": []
-    },
-    {
-        "id": "d8522ce2.371d7",
-        "type": "template",
-        "z": "7329e9b3.909368",
-        "name": "SELECT Datetime of LAST FULL HOUR",
-        "field": "topic",
-        "fieldType": "msg",
-        "format": "handlebars",
-        "syntax": "mustache",
-        "template": "SELECT NOW(), DATE(NOW()), HOUR(NOW()), MINUTE(NOW()), SECOND(NOW()), DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND) ;",
-        "output": "str",
-        "x": 480,
-        "y": 2320,
-        "wires": [
-            [
-                "f4771452.c17568"
-            ]
-        ]
-    },
-    {
         "id": "1a6236c4.885589",
         "type": "inject",
         "z": "7329e9b3.909368",
@@ -28555,40 +27943,11 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 200,
-        "y": 2320,
+        "x": 160,
+        "y": 1880,
         "wires": [
             [
-                "d8522ce2.371d7",
-                "18c9cc4f.cd66d4"
-            ]
-        ]
-    },
-    {
-        "id": "131e50a5.8f1baf",
-        "type": "debug",
-        "z": "7329e9b3.909368",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "x": 1170,
-        "y": 2320,
-        "wires": []
-    },
-    {
-        "id": "f4771452.c17568",
-        "type": "mysql",
-        "z": "7329e9b3.909368",
-        "mydb": "f524d036.2b55a",
-        "name": "MYSQL db example ",
-        "x": 900,
-        "y": 2320,
-        "wires": [
-            [
-                "131e50a5.8f1baf"
+                "27261127.6e2f3e"
             ]
         ]
     },
@@ -28601,10 +27960,10 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "SELECT DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{payload}});",
+        "template": "SELECT DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
         "output": "str",
-        "x": 510,
-        "y": 2380,
+        "x": 676,
+        "y": 1880,
         "wires": [
             [
                 "337addb6.8f0fd2",
@@ -28616,10 +27975,10 @@
         "id": "7379439e.4a9b8c",
         "type": "comment",
         "z": "7329e9b3.909368",
-        "name": "THIS IS THE BASIS",
+        "name": "THIS IS THE BASIS FOR SELECTING A TIME RANGE",
         "info": "",
-        "x": 410,
-        "y": 2260,
+        "x": 480,
+        "y": 1840,
         "wires": []
     },
     {
@@ -28632,8 +27991,8 @@
         "console": false,
         "tostatus": false,
         "complete": "topic",
-        "x": 800,
-        "y": 2460,
+        "x": 966,
+        "y": 1940,
         "wires": []
     },
     {
@@ -28642,8 +28001,8 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 1100,
-        "y": 2380,
+        "x": 1006,
+        "y": 1880,
         "wires": [
             [
                 "7fcd6ccc.9ddd64"
@@ -28660,23 +28019,23 @@
         "console": false,
         "tostatus": false,
         "complete": "payload",
-        "x": 1310,
-        "y": 2380,
+        "x": 1216,
+        "y": 1880,
         "wires": []
     },
     {
         "id": "9dce4d8b.df6ea",
         "type": "template",
         "z": "7329e9b3.909368",
-        "name": "SELECT Datetime of LAST FULL HOUR - N HOUR",
+        "name": "COUNT older than last complete hour - INTERVAL",
         "field": "topic",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "SELECT COUNT(*) from practice WHERE timestamp > DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{payload}});",
+        "template": "SELECT COUNT(*) from practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
         "output": "str",
-        "x": 550,
-        "y": 1980,
+        "x": 670,
+        "y": 2020,
         "wires": [
             [
                 "aae02fb3.626fb"
@@ -28695,13 +28054,11 @@
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
-        "x": 200,
-        "y": 1980,
+        "x": 160,
+        "y": 2020,
         "wires": [
             [
-                "9dce4d8b.df6ea",
-                "aa8c5a0c.9f4ae8",
-                "6b0a6bc2.da05d4"
+                "6cbf310.10dc6d"
             ]
         ]
     },
@@ -28715,8 +28072,8 @@
         "console": false,
         "tostatus": false,
         "complete": "payload[0].COUNT(*)",
-        "x": 1190,
-        "y": 1980,
+        "x": 1250,
+        "y": 2020,
         "wires": []
     },
     {
@@ -28725,8 +28082,8 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 880,
-        "y": 1980,
+        "x": 1000,
+        "y": 2020,
         "wires": [
             [
                 "d692a12.5915e6"
@@ -28737,15 +28094,15 @@
         "id": "aa8c5a0c.9f4ae8",
         "type": "template",
         "z": "7329e9b3.909368",
-        "name": "SELECT Datetime of LAST FULL HOUR - N HOUR",
+        "name": "COUNT younger than last complete hour - INTERVAL",
         "field": "topic",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "SELECT COUNT(*) from practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{payload}});",
+        "template": "SELECT COUNT(*) from practice WHERE timestamp > DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
         "output": "str",
-        "x": 550,
-        "y": 2020,
+        "x": 680,
+        "y": 2060,
         "wires": [
             [
                 "aae02fb3.626fb"
@@ -28756,19 +28113,1369 @@
         "id": "6b0a6bc2.da05d4",
         "type": "template",
         "z": "7329e9b3.909368",
-        "name": "SELECT Datetime of LAST FULL HOUR - N HOUR",
+        "name": "COUNT (about) all - (INTERVAL = 0)",
         "field": "topic",
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
         "template": "SELECT COUNT(*) from practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL 0 HOUR);",
         "output": "str",
-        "x": 550,
-        "y": 2060,
+        "x": 630,
+        "y": 2100,
         "wires": [
             [
                 "aae02fb3.626fb"
             ]
+        ]
+    },
+    {
+        "id": "9b29cdbb.4876c",
+        "type": "inject",
+        "z": "599e8aab.a9ec84",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "x": 150,
+        "y": 660,
+        "wires": [
+            [
+                "b3063a0e.7f57f8"
+            ]
+        ]
+    },
+    {
+        "id": "b3063a0e.7f57f8",
+        "type": "template",
+        "z": "599e8aab.a9ec84",
+        "name": "USE nodered_db; CREATE TABLE epower2;",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "USE nodered_db;\nCREATE TABLE IF NOT EXISTS epower2 (power_id INT NOT NULL AUTO_INCREMENT, timestamp TIMESTAMP, power INT(5), posedge INT(5), negedge INT(5), PRIMARY KEY (power_id));\n",
+        "output": "str",
+        "x": 450,
+        "y": 660,
+        "wires": [
+            [
+                "606b5cb8.705014"
+            ]
+        ]
+    },
+    {
+        "id": "1d49e6d1.a97c99",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "INEFFICIENT: Plots the COMPLETE DB every minute",
+        "info": "",
+        "x": 480,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "8ee1e73.f14b718",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "COUNT ALL (younger than infinite)",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT COUNT(*) from practice WHERE timestamp > DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
+        "output": "str",
+        "x": 620,
+        "y": 2140,
+        "wires": [
+            [
+                "aae02fb3.626fb"
+            ]
+        ]
+    },
+    {
+        "id": "8d2236b7.9c5908",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "99999 HOUR",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 170,
+        "y": 2140,
+        "wires": [
+            [
+                "36ca8a6f.98c986"
+            ]
+        ]
+    },
+    {
+        "id": "8736b0d0.7a974",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "DELETE older than specified interval",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DELETE FROM practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
+        "output": "str",
+        "x": 624,
+        "y": 2756,
+        "wires": [
+            [
+                "a34be7ac.8edc78"
+            ]
+        ]
+    },
+    {
+        "id": "a34be7ac.8edc78",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 994,
+        "y": 2756,
+        "wires": [
+            [
+                "2421dfae.b620e",
+                "eeae13c1.0055b"
+            ]
+        ]
+    },
+    {
+        "id": "2421dfae.b620e",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1224,
+        "y": 2756,
+        "wires": []
+    },
+    {
+        "id": "eeae13c1.0055b",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.affectedRows",
+        "x": 1294,
+        "y": 2816,
+        "wires": []
+    },
+    {
+        "id": "c67acf70.74aa5",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "COUNT older than specified interval",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT COUNT(*) FROM practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
+        "output": "str",
+        "x": 624,
+        "y": 2260,
+        "wires": [
+            [
+                "75730579.fd0f7c"
+            ]
+        ]
+    },
+    {
+        "id": "62148df3.69e7b4",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "50 HOUR",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 2260,
+        "wires": [
+            [
+                "a450e740.f5e548"
+            ]
+        ]
+    },
+    {
+        "id": "75730579.fd0f7c",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 994,
+        "y": 2260,
+        "wires": [
+            [
+                "e4bbf1f6.bb8c2"
+            ]
+        ]
+    },
+    {
+        "id": "e4bbf1f6.bb8c2",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1224,
+        "y": 2260,
+        "wires": []
+    },
+    {
+        "id": "11ed5b95.ba8764",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "Delete oldest records",
+        "info": "",
+        "x": 574,
+        "y": 2716,
+        "wires": []
+    },
+    {
+        "id": "7d76116e.9a2ee",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "COUNT oldest records",
+        "info": "",
+        "x": 774,
+        "y": 2220,
+        "wires": []
+    },
+    {
+        "id": "c7474800.114818",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "CALCULATE",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT DATE_SUB(timestamp, INTERVAL SECOND(timestamp) SECOND ), AVG(power), MAX(power), MIN(POWER), MAX(posedge), MAX(negedge) FROM practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) GROUP BY HOUR(timestamp);",
+        "output": "str",
+        "x": 544,
+        "y": 2360,
+        "wires": [
+            [
+                "c80cf48e.abd278"
+            ]
+        ]
+    },
+    {
+        "id": "4a7cad66.d53b34",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "50 HOUR",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 2360,
+        "wires": [
+            [
+                "94a237fc.2879f8"
+            ]
+        ]
+    },
+    {
+        "id": "c80cf48e.abd278",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 994,
+        "y": 2360,
+        "wires": [
+            [
+                "add1ac68.0953e"
+            ]
+        ]
+    },
+    {
+        "id": "add1ac68.0953e",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1224,
+        "y": 2360,
+        "wires": []
+    },
+    {
+        "id": "49815acc.d8f4d4",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "CALCULATE aggregates of  oldest records GOUPED BY THE HOUR",
+        "info": "",
+        "x": 714,
+        "y": 2320,
+        "wires": []
+    },
+    {
+        "id": "e1ccbfe1.be439",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "store the aggregates in an hourly_<table_name)>",
+        "info": "",
+        "x": 654,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "7a453b82.0d9004",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "on succes, delete the oldest records from <table_name>",
+        "info": "",
+        "x": 674,
+        "y": 2560,
+        "wires": []
+    },
+    {
+        "id": "db9a72c6.c7662",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "5",
+        "x": 170,
+        "y": 1700,
+        "wires": [
+            [
+                "2fd8285e.974228"
+            ]
+        ]
+    },
+    {
+        "id": "2fd8285e.974228",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "USE nodered_db; CREATE TABLE hourly_practice;",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "USE nodered_db;\nCREATE TABLE IF NOT EXISTS hourly_practice (hourly_id INT NOT NULL AUTO_INCREMENT, datetime DATETIME, avgpower FLOAT(9), maxpower INT(5), minpower INT(5), maxposedge INT(5), maxnegedge INT(5), PRIMARY KEY (hourly_id));\n",
+        "output": "str",
+        "x": 490,
+        "y": 1700,
+        "wires": [
+            [
+                "1e972a71.a68006"
+            ]
+        ]
+    },
+    {
+        "id": "1e972a71.a68006",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 840,
+        "y": 1700,
+        "wires": [
+            [
+                "e8963bf0.896588"
+            ]
+        ]
+    },
+    {
+        "id": "e8963bf0.896588",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1070,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "3642c3cc.839f8c",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "LIST",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 170,
+        "y": 1440,
+        "wires": [
+            [
+                "20d3127c.71ce4e"
+            ]
+        ]
+    },
+    {
+        "id": "20d3127c.71ce4e",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "LIST hourly_practice",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT * FROM hourly_practice;",
+        "output": "str",
+        "x": 420,
+        "y": 1440,
+        "wires": [
+            [
+                "40d0dbad.863d64"
+            ]
+        ]
+    },
+    {
+        "id": "25ea4611.a502ea",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "COUNT hourly_practice",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT COUNT(*) FROM hourly_practice;",
+        "output": "str",
+        "x": 430,
+        "y": 1500,
+        "wires": [
+            [
+                "26cc3165.bf08ee"
+            ]
+        ]
+    },
+    {
+        "id": "b6c87326.639f8",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 990,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "142beb1d.3cec15",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "COUNT",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 170,
+        "y": 1500,
+        "wires": [
+            [
+                "25ea4611.a502ea"
+            ]
+        ]
+    },
+    {
+        "id": "ea2e7725.5f5828",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload[0].COUNT(*)",
+        "x": 1040,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "40d0dbad.863d64",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 760,
+        "y": 1440,
+        "wires": [
+            [
+                "b6c87326.639f8"
+            ]
+        ]
+    },
+    {
+        "id": "26cc3165.bf08ee",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 760,
+        "y": 1500,
+        "wires": [
+            [
+                "ea2e7725.5f5828"
+            ]
+        ]
+    },
+    {
+        "id": "df8b0992.9f34c8",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "INSERT INTO SELECT FROM WHERE GROUP BY",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "INSERT INTO hourly_practice (datetime, avgpower, maxpower, minpower, maxposedge, maxnegedge) SELECT DATE_SUB(timestamp, INTERVAL SECOND(timestamp) SECOND ) as new_timestamp, AVG(power), MAX(power), MIN(POWER), MAX(posedge), MAX(negedge) FROM practice  WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) GROUP BY HOUR(timestamp) ORDER BY timestamp ASC;",
+        "output": "str",
+        "x": 674,
+        "y": 2500,
+        "wires": [
+            [
+                "cfb0aa76.8a7d58"
+            ]
+        ]
+    },
+    {
+        "id": "3d398ff9.ceb19",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "24 HOUR",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 2500,
+        "wires": [
+            [
+                "5ce104a2.a11e9c"
+            ]
+        ]
+    },
+    {
+        "id": "cfb0aa76.8a7d58",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 1014,
+        "y": 2500,
+        "wires": [
+            [
+                "ad4cee0c.0a7c1",
+                "ce4b4ef6.2becd"
+            ]
+        ]
+    },
+    {
+        "id": "ad4cee0c.0a7c1",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1244,
+        "y": 2500,
+        "wires": []
+    },
+    {
+        "id": "9b2ea985.92f3d8",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "DROP TABLE hourly_practice",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP TABLE hourly_practice;\n",
+        "output": "str",
+        "x": 410,
+        "y": 1620,
+        "wires": [
+            [
+                "2220553c.e0190a"
+            ]
+        ]
+    },
+    {
+        "id": "1f7541e8.3f379e",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "DROP",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 210,
+        "y": 1620,
+        "wires": [
+            [
+                "9b2ea985.92f3d8"
+            ]
+        ]
+    },
+    {
+        "id": "2220553c.e0190a",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 740,
+        "y": 1560,
+        "wires": [
+            [
+                "bc0ee047.4ede3"
+            ]
+        ]
+    },
+    {
+        "id": "bc0ee047.4ede3",
+        "type": "json",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 950,
+        "y": 1560,
+        "wires": [
+            [
+                "86211abf.929c48"
+            ]
+        ]
+    },
+    {
+        "id": "86211abf.929c48",
+        "type": "json",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 1110,
+        "y": 1560,
+        "wires": [
+            [
+                "f48b4b72.f26578"
+            ]
+        ]
+    },
+    {
+        "id": "f48b4b72.f26578",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 1270,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "27261127.6e2f3e",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 330,
+        "y": 1880,
+        "wires": [
+            [
+                "18c9cc4f.cd66d4"
+            ]
+        ]
+    },
+    {
+        "id": "6cbf310.10dc6d",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 330,
+        "y": 2020,
+        "wires": [
+            [
+                "9dce4d8b.df6ea",
+                "aa8c5a0c.9f4ae8",
+                "6b0a6bc2.da05d4"
+            ]
+        ]
+    },
+    {
+        "id": "36ca8a6f.98c986",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 330,
+        "y": 2140,
+        "wires": [
+            [
+                "8ee1e73.f14b718"
+            ]
+        ]
+    },
+    {
+        "id": "a450e740.f5e548",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 2260,
+        "wires": [
+            [
+                "c67acf70.74aa5"
+            ]
+        ]
+    },
+    {
+        "id": "94a237fc.2879f8",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 350,
+        "y": 2360,
+        "wires": [
+            [
+                "c7474800.114818"
+            ]
+        ]
+    },
+    {
+        "id": "5ce104a2.a11e9c",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 330,
+        "y": 2500,
+        "wires": [
+            [
+                "df8b0992.9f34c8"
+            ]
+        ]
+    },
+    {
+        "id": "8daaebce.ad4398",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "warningCount <> 0",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1170,
+        "y": 2620,
+        "wires": []
+    },
+    {
+        "id": "ce4b4ef6.2becd",
+        "type": "switch",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "property": "payload.warningCount",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 900,
+        "y": 2640,
+        "wires": [
+            [
+                "8daaebce.ad4398"
+            ],
+            [
+                "8736b0d0.7a974"
+            ]
+        ]
+    },
+    {
+        "id": "ddf92123.a5f3d",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "Placeholder for graphing data from table practice",
+        "info": "",
+        "x": 260,
+        "y": 2900,
+        "wires": []
+    },
+    {
+        "id": "e4f75772.cbee58",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "LIST readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT datetime AS \"x\", avgpower as \"y\" FROM hourly_practice;",
+        "output": "str",
+        "x": 393,
+        "y": 2960,
+        "wires": [
+            [
+                "8f5c7a77.80c0a8"
+            ]
+        ]
+    },
+    {
+        "id": "d4ea046a.3e5ae8",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 590,
+        "y": 2900,
+        "wires": []
+    },
+    {
+        "id": "b4c8c576.bc1418",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 823,
+        "y": 2960,
+        "wires": [
+            [
+                "b8627dcb.e2e14",
+                "1461b130.2d4dcf"
+            ]
+        ]
+    },
+    {
+        "id": "b8627dcb.e2e14",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1010,
+        "y": 2960,
+        "wires": []
+    },
+    {
+        "id": "d00cc10.157534",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 790,
+        "y": 2900,
+        "wires": [
+            [
+                "e0c85724.6a1388"
+            ]
+        ]
+    },
+    {
+        "id": "e0c85724.6a1388",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 910,
+        "y": 2900,
+        "wires": [
+            [
+                "1461b130.2d4dcf"
+            ]
+        ]
+    },
+    {
+        "id": "8f5c7a77.80c0a8",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 613,
+        "y": 2960,
+        "wires": [
+            [
+                "d4ea046a.3e5ae8",
+                "b4c8c576.bc1418"
+            ]
+        ]
+    },
+    {
+        "id": "1461b130.2d4dcf",
+        "type": "ui_chart",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "group": "8399f10d.b5a3d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "avgpower (hourly_practice db)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "D/M",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 1130,
+        "y": 2900,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "ed96a94a.841d08",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "GRAPH hourly practice",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 180,
+        "y": 2960,
+        "wires": [
+            [
+                "e4f75772.cbee58",
+                "47fc7b02.af3754",
+                "eac84b55.063168"
+            ]
+        ]
+    },
+    {
+        "id": "47fc7b02.af3754",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "LIST readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT datetime AS \"x\", maxposedge as \"y\" FROM hourly_practice;",
+        "output": "str",
+        "x": 420,
+        "y": 3120,
+        "wires": [
+            [
+                "8814a349.21dac"
+            ]
+        ]
+    },
+    {
+        "id": "611f7d62.1e5c94",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 617,
+        "y": 3060,
+        "wires": []
+    },
+    {
+        "id": "f6a337bd.89d058",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 850,
+        "y": 3120,
+        "wires": [
+            [
+                "a41f6a0d.007118",
+                "738aa471.c78b9c"
+            ]
+        ]
+    },
+    {
+        "id": "a41f6a0d.007118",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1037,
+        "y": 3120,
+        "wires": []
+    },
+    {
+        "id": "444a353.7cc5dcc",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 817,
+        "y": 3060,
+        "wires": [
+            [
+                "eb454cf5.01a2c"
+            ]
+        ]
+    },
+    {
+        "id": "eb454cf5.01a2c",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 937,
+        "y": 3060,
+        "wires": [
+            [
+                "738aa471.c78b9c"
+            ]
+        ]
+    },
+    {
+        "id": "8814a349.21dac",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 640,
+        "y": 3120,
+        "wires": [
+            [
+                "611f7d62.1e5c94",
+                "f6a337bd.89d058"
+            ]
+        ]
+    },
+    {
+        "id": "738aa471.c78b9c",
+        "type": "ui_chart",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "group": "8399f10d.b5a3d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "maxposedge (hourly_practice db)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "D/M",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 1167,
+        "y": 3060,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "eac84b55.063168",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "LIST readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT datetime AS \"x\", maxnegedge as \"y\" FROM hourly_practice;",
+        "output": "str",
+        "x": 460,
+        "y": 3280,
+        "wires": [
+            [
+                "ced8d968.6906e8"
+            ]
+        ]
+    },
+    {
+        "id": "5b4f94a9.a4babc",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 657,
+        "y": 3220,
+        "wires": []
+    },
+    {
+        "id": "1a33db44.171245",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 890,
+        "y": 3280,
+        "wires": [
+            [
+                "53351127.e2103",
+                "9baaeceb.af67e"
+            ]
+        ]
+    },
+    {
+        "id": "53351127.e2103",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1077,
+        "y": 3280,
+        "wires": []
+    },
+    {
+        "id": "5f776a38.dac224",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 857,
+        "y": 3220,
+        "wires": [
+            [
+                "9c7fd755.d616c8"
+            ]
+        ]
+    },
+    {
+        "id": "9c7fd755.d616c8",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 977,
+        "y": 3220,
+        "wires": [
+            [
+                "9baaeceb.af67e"
+            ]
+        ]
+    },
+    {
+        "id": "ced8d968.6906e8",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 680,
+        "y": 3280,
+        "wires": [
+            [
+                "5b4f94a9.a4babc",
+                "1a33db44.171245"
+            ]
+        ]
+    },
+    {
+        "id": "9baaeceb.af67e",
+        "type": "ui_chart",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "group": "8399f10d.b5a3d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "maxnegedge (hourly_practice db)",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "D/M",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 1207,
+        "y": 3220,
+        "wires": [
+            [],
+            []
         ]
     }
 ]
