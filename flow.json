@@ -27715,7 +27715,7 @@
         "chartType": "line",
         "legend": "false",
         "xformat": "D/M",
-        "interpolate": "linear",
+        "interpolate": "step",
         "nodata": "",
         "dot": false,
         "ymin": "",
@@ -27737,7 +27737,7 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1100,
+        "x": 1080,
         "y": 420,
         "wires": [
             [],
@@ -28227,8 +28227,8 @@
         "syntax": "mustache",
         "template": "DELETE FROM practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}});",
         "output": "str",
-        "x": 624,
-        "y": 2756,
+        "x": 610,
+        "y": 2740,
         "wires": [
             [
                 "a34be7ac.8edc78"
@@ -28458,7 +28458,7 @@
         "z": "7329e9b3.909368",
         "name": "on succes, delete the oldest records from <table_name>",
         "info": "",
-        "x": 674,
+        "x": 460,
         "y": 2560,
         "wires": []
     },
@@ -28672,13 +28672,14 @@
         "fieldType": "msg",
         "format": "handlebars",
         "syntax": "mustache",
-        "template": "INSERT INTO hourly_practice (datetime, avgpower, maxpower, minpower, maxposedge, maxnegedge) SELECT DATE_SUB(timestamp, INTERVAL SECOND(timestamp) SECOND ) as new_timestamp, AVG(power), MAX(power), MIN(POWER), MAX(posedge), MAX(negedge) FROM practice  WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) GROUP BY HOUR(timestamp) ORDER BY timestamp ASC;",
+        "template": "INSERT INTO hourly_practice (datetime, avgpower, maxpower, minpower, maxposedge, maxnegedge) SELECT DATE_SUB(timestamp, INTERVAL MINUTE(timestamp)*60+SECOND(timestamp) SECOND ) as new_timestamp, AVG(power), MAX(power), MIN(POWER), MAX(posedge), MAX(negedge) FROM practice  WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) AND timestamp > TIMESTAMP(\"{{max_agg_time}}\")   GROUP BY HOUR(timestamp) ORDER BY timestamp ASC;",
         "output": "str",
-        "x": 674,
-        "y": 2500,
+        "x": 700,
+        "y": 2480,
         "wires": [
             [
-                "cfb0aa76.8a7d58"
+                "cfb0aa76.8a7d58",
+                "a6444312.cc05b"
             ]
         ]
     },
@@ -28688,14 +28689,14 @@
         "z": "7329e9b3.909368",
         "name": "",
         "topic": "",
-        "payload": "24 HOUR",
+        "payload": "2 HOUR",
         "payloadType": "str",
         "repeat": "",
         "crontab": "",
         "once": false,
-        "onceDelay": 0.1,
-        "x": 160,
-        "y": 2500,
+        "onceDelay": "10",
+        "x": 140,
+        "y": 2480,
         "wires": [
             [
                 "5ce104a2.a11e9c"
@@ -28708,7 +28709,7 @@
         "z": "7329e9b3.909368",
         "mydb": "f524d036.2b55a",
         "name": "MYSQL db example ",
-        "x": 1014,
+        "x": 1040,
         "y": 2500,
         "wires": [
             [
@@ -28917,14 +28918,14 @@
         "type": "function",
         "z": "7329e9b3.909368",
         "name": "",
-        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nmsg.max_agg_time = null;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "x": 330,
-        "y": 2500,
+        "y": 2480,
         "wires": [
             [
-                "df8b0992.9f34c8"
+                "357060c6.b972c"
             ]
         ]
     },
@@ -28970,9 +28971,7 @@
             [
                 "8daaebce.ad4398"
             ],
-            [
-                "8736b0d0.7a974"
-            ]
+            []
         ]
     },
     {
@@ -28996,8 +28995,8 @@
         "syntax": "mustache",
         "template": "SELECT datetime AS \"x\", avgpower as \"y\" FROM hourly_practice;",
         "output": "str",
-        "x": 393,
-        "y": 2960,
+        "x": 380,
+        "y": 2940,
         "wires": [
             [
                 "8f5c7a77.80c0a8"
@@ -29113,7 +29112,7 @@
         "chartType": "line",
         "legend": "false",
         "xformat": "D/M",
-        "interpolate": "linear",
+        "interpolate": "step",
         "nodata": "",
         "dot": false,
         "ymin": "",
@@ -29292,7 +29291,7 @@
         "chartType": "line",
         "legend": "false",
         "xformat": "D/M",
-        "interpolate": "linear",
+        "interpolate": "step",
         "nodata": "",
         "dot": false,
         "ymin": "",
@@ -29314,8 +29313,8 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1167,
-        "y": 3060,
+        "x": 1120,
+        "y": 3040,
         "wires": [
             [],
             []
@@ -29449,7 +29448,7 @@
         "chartType": "line",
         "legend": "false",
         "xformat": "D/M",
-        "interpolate": "linear",
+        "interpolate": "step",
         "nodata": "",
         "dot": false,
         "ymin": "",
@@ -29471,11 +29470,490 @@
             "#c5b0d5"
         ],
         "useOldStyle": false,
-        "x": 1207,
+        "x": 1200,
         "y": 3220,
         "wires": [
             [],
             []
+        ]
+    },
+    {
+        "id": "b55bbf32.79d68",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "1 HOUR",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 300,
+        "y": 3500,
+        "wires": [
+            [
+                "2cbfcca6.40c8a4"
+            ]
+        ]
+    },
+    {
+        "id": "2cbfcca6.40c8a4",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 450,
+        "y": 3500,
+        "wires": [
+            [
+                "8693ea18.3b7858"
+            ]
+        ]
+    },
+    {
+        "id": "8693ea18.3b7858",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "SELECT FROM WHERE GROUP BY",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT DATE_SUB(timestamp, INTERVAL MINUTE(timestamp)*60+SECOND(timestamp) SECOND ), COUNT(*) FROM practice WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) GROUP BY HOUR(timestamp) ORDER BY timestamp ASC;",
+        "output": "str",
+        "x": 710,
+        "y": 3500,
+        "wires": [
+            [
+                "2e7e3c33.55b9a4"
+            ]
+        ]
+    },
+    {
+        "id": "2e7e3c33.55b9a4",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 440,
+        "y": 3540,
+        "wires": [
+            [
+                "1a77b966.033da7"
+            ]
+        ]
+    },
+    {
+        "id": "1a77b966.033da7",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 610,
+        "y": 3540,
+        "wires": []
+    },
+    {
+        "id": "846872f.9d8599",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "SELECT minimum timestap in the practice data to be aggregated",
+        "info": "",
+        "x": 630,
+        "y": 3420,
+        "wires": []
+    },
+    {
+        "id": "19a38c39.dde1a4",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "SELECT maximum timestap in the hourly_practice data",
+        "info": "",
+        "x": 580,
+        "y": 3640,
+        "wires": []
+    },
+    {
+        "id": "c9b7b7d2.de3da8",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "TO PREVENT DUPLICATES only load aggregates when minimum > maximum",
+        "info": "",
+        "x": 650,
+        "y": 3700,
+        "wires": []
+    },
+    {
+        "id": "1d99a5a6.340c0a",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "THIS ENABLES CALLING the aggregation procedure more often than ",
+        "info": "",
+        "x": 630,
+        "y": 3760,
+        "wires": []
+    },
+    {
+        "id": "dc154988.f0c768",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "also enables different borders for deletion and aggregation",
+        "info": "",
+        "x": 590,
+        "y": 3820,
+        "wires": []
+    },
+    {
+        "id": "68ba20d1.265d6",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 300,
+        "y": 3920,
+        "wires": [
+            [
+                "b07b0a01.c72a38"
+            ]
+        ]
+    },
+    {
+        "id": "b07b0a01.c72a38",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "SELECT MAX(datetime) from hourly_practice",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT (MAX(datetime) < NOW()) OR (COUNT(*) = 0) FROM hourly_practice",
+        "output": "str",
+        "x": 550,
+        "y": 3920,
+        "wires": [
+            [
+                "e3e377f0.3222b8"
+            ]
+        ]
+    },
+    {
+        "id": "92395bca.af84c8",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1050,
+        "y": 3920,
+        "wires": []
+    },
+    {
+        "id": "e3e377f0.3222b8",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 860,
+        "y": 3920,
+        "wires": [
+            [
+                "92395bca.af84c8"
+            ]
+        ]
+    },
+    {
+        "id": "e85550b8.0874c",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "SELECT FROM WHERE GROUP BY",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) ;",
+        "output": "str",
+        "x": 550,
+        "y": 3980,
+        "wires": [
+            [
+                "c1c0baaf.4cfef8"
+            ]
+        ]
+    },
+    {
+        "id": "bcf96f59.2791d",
+        "type": "inject",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "topic": "",
+        "payload": "1 HOUR",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 160,
+        "y": 3980,
+        "wires": [
+            [
+                "d6a1916d.1479a"
+            ]
+        ]
+    },
+    {
+        "id": "d6a1916d.1479a",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "var myinterval = msg.payload;\nmsg.interval = myinterval;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 310,
+        "y": 3980,
+        "wires": [
+            [
+                "e85550b8.0874c"
+            ]
+        ]
+    },
+    {
+        "id": "c1c0baaf.4cfef8",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 880,
+        "y": 3980,
+        "wires": [
+            [
+                "2b787306.a6641c"
+            ]
+        ]
+    },
+    {
+        "id": "2b787306.a6641c",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1070,
+        "y": 3980,
+        "wires": []
+    },
+    {
+        "id": "407d9375.8f31dc",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "timestamp > this expression",
+        "info": "",
+        "x": 1300,
+        "y": 3920,
+        "wires": []
+    },
+    {
+        "id": "c3d5de1b.715d1",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "timestamp > this expression",
+        "info": "",
+        "x": 1300,
+        "y": 3980,
+        "wires": []
+    },
+    {
+        "id": "5cbb8bae.0814a4",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "timestamp < laatste afgeronde period  MAAR > max timestap in aggregaat file",
+        "info": "",
+        "x": 650,
+        "y": 3880,
+        "wires": []
+    },
+    {
+        "id": "27d99837.6c4dc8",
+        "type": "comment",
+        "z": "7329e9b3.909368",
+        "name": "wat als de aggregaat file leeg is??? dan  is de conditie time stamp > altijd true",
+        "info": "",
+        "x": 650,
+        "y": 4060,
+        "wires": []
+    },
+    {
+        "id": "357060c6.b972c",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "get max",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT MAX(datetime) AS mymax FROM hourly_practice; ",
+        "output": "str",
+        "x": 100,
+        "y": 2640,
+        "wires": [
+            [
+                "769d6c6c.031754"
+            ]
+        ]
+    },
+    {
+        "id": "769d6c6c.031754",
+        "type": "mysql",
+        "z": "7329e9b3.909368",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 340,
+        "y": 2640,
+        "wires": [
+            [
+                "478eba99.9fdc54",
+                "c56821.94f1a7e"
+            ]
+        ]
+    },
+    {
+        "id": "478eba99.9fdc54",
+        "type": "function",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "func": "msg.max_agg_time = msg.payload[0].mymax;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 550,
+        "y": 2640,
+        "wires": [
+            [
+                "396a4e1a.b262f2",
+                "665be91a.5c8798"
+            ]
+        ]
+    },
+    {
+        "id": "c56821.94f1a7e",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 710,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "396a4e1a.b262f2",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "QUERY",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 720,
+        "y": 2660,
+        "wires": []
+    },
+    {
+        "id": "a6444312.cc05b",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "QUERY 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 980,
+        "y": 2440,
+        "wires": []
+    },
+    {
+        "id": "21b5d56a.9841ba",
+        "type": "template",
+        "z": "7329e9b3.909368",
+        "name": "INSERT INTO SELECT FROM WHERE GROUP BY",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "INSERT INTO hourly_practice (datetime, avgpower, maxpower, minpower, maxposedge, maxnegedge) SELECT DATE_SUB(timestamp, INTERVAL MINUTE(timestamp)*60+SECOND(timestamp) SECOND ) as new_timestamp, AVG(power), MAX(power), MIN(POWER), MAX(posedge), MAX(negedge) FROM practice  WHERE timestamp < DATE_SUB(DATE_SUB(NOW(), INTERVAL MINUTE(NOW())*60+SECOND(NOW()) SECOND), INTERVAL {{interval}}) GROUP BY HOUR(timestamp) ORDER BY timestamp ASC;",
+        "output": "str",
+        "x": 700,
+        "y": 2520,
+        "wires": [
+            [
+                "cfb0aa76.8a7d58",
+                "c6bc799e.95b9f8"
+            ]
+        ]
+    },
+    {
+        "id": "c6bc799e.95b9f8",
+        "type": "debug",
+        "z": "7329e9b3.909368",
+        "name": "QUERY 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 980,
+        "y": 2560,
+        "wires": []
+    },
+    {
+        "id": "665be91a.5c8798",
+        "type": "switch",
+        "z": "7329e9b3.909368",
+        "name": "",
+        "property": "max_agg_time",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 410,
+        "y": 2600,
+        "wires": [
+            [
+                "21b5d56a.9841ba"
+            ],
+            [
+                "df8b0992.9f34c8"
+            ]
         ]
     }
 ]
