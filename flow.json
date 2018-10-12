@@ -35,6 +35,13 @@
         "info": ""
     },
     {
+        "id": "cd6789e6.ff3648",
+        "type": "tab",
+        "label": "FITTING",
+        "disabled": true,
+        "info": ""
+    },
+    {
         "id": "491766dc.090828",
         "type": "tab",
         "label": "Example 1 Hello World!",
@@ -5567,7 +5574,7 @@
         "type": "debug",
         "z": "a2794803.694d38",
         "name": "",
-        "active": false,
+        "active": true,
         "console": "false",
         "complete": "true",
         "x": 810,
@@ -27749,7 +27756,7 @@
         "z": "7329e9b3.909368",
         "name": "",
         "group": "8399f10d.b5a3d",
-        "order": 5,
+        "order": 10,
         "width": 0,
         "height": 0,
         "label": "Power (practice db)",
@@ -28378,7 +28385,7 @@
         "z": "7329e9b3.909368",
         "name": "",
         "group": "8399f10d.b5a3d",
-        "order": 2,
+        "order": 7,
         "width": 0,
         "height": 0,
         "label": "avgpower (hourly_practice db)",
@@ -28521,7 +28528,7 @@
         "z": "7329e9b3.909368",
         "name": "",
         "group": "8399f10d.b5a3d",
-        "order": 3,
+        "order": 8,
         "width": 0,
         "height": 0,
         "label": "maxposedge (hourly_practice db)",
@@ -28642,7 +28649,7 @@
         "z": "7329e9b3.909368",
         "name": "",
         "group": "8399f10d.b5a3d",
-        "order": 4,
+        "order": 9,
         "width": 0,
         "height": 0,
         "label": "maxnegedge (hourly_practice db)",
@@ -29564,8 +29571,8 @@
         "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
-        "x": 1010,
-        "y": 2240,
+        "x": 990,
+        "y": 2220,
         "wires": [
             [
                 "1dcf8447.6f152c",
@@ -29593,7 +29600,7 @@
         "z": "2b73b789.bed1b8",
         "name": "",
         "group": "8399f10d.b5a3d",
-        "order": 1,
+        "order": 3,
         "width": 0,
         "height": 0,
         "label": "CUM power",
@@ -29865,7 +29872,7 @@
         "z": "2b73b789.bed1b8",
         "name": "",
         "group": "8399f10d.b5a3d",
-        "order": 1,
+        "order": 4,
         "width": 0,
         "height": 0,
         "label": "SHAVING TEST",
@@ -30862,6 +30869,2674 @@
             [
                 "ccbcb44a.4c8b78"
             ]
+        ]
+    },
+    {
+        "id": "a8fadddb.0ec7a",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "CREATE PROCEDURE makebins Creation of BIN TABLE",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "CREATE PROCEDURE makebins(numbins INT, binsize FLOAT) # binsize may be NULL for auto-size\nBEGIN\n SELECT FLOOR(MIN(posedge)) INTO @binmin FROM epower2;\n SELECT CEIL(MAX(posedge)) INTO @binmax FROM epower2;\n IF binsize IS NULL \n  THEN SET binsize = CEIL((@binmax-@binmin)/numbins); # CEIL here may prevent the potential creation a very small extra bin due to rounding errors, but no good where floats are needed.\n END IF;\n SET @currlim = @binmin;\n WHILE @currlim + binsize < @binmax DO\n  INSERT INTO bins VALUES (@currlim, @currlim+binsize);\n  SET @currlim = @currlim + binsize;\n END WHILE;\n INSERT INTO bins VALUES (@currlim, @maxbin);\nEND;",
+        "output": "str",
+        "x": 450,
+        "y": 3700,
+        "wires": [
+            [
+                "ff887eff.01d39"
+            ]
+        ]
+    },
+    {
+        "id": "343eb4e4.44149c",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "CREATE",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 120,
+        "y": 3700,
+        "wires": [
+            [
+                "a8fadddb.0ec7a"
+            ]
+        ]
+    },
+    {
+        "id": "ff887eff.01d39",
+        "type": "mysql",
+        "z": "2b73b789.bed1b8",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 800,
+        "y": 3700,
+        "wires": [
+            [
+                "ec8abac5.f3a708"
+            ]
+        ]
+    },
+    {
+        "id": "ec8abac5.f3a708",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUM",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1010,
+        "y": 3700,
+        "wires": []
+    },
+    {
+        "id": "ed25dbc1.307c58",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "DROP PROCEDURE makebins",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP PROCEDURE makebins;",
+        "output": "str",
+        "x": 370,
+        "y": 3760,
+        "wires": [
+            [
+                "ff887eff.01d39"
+            ]
+        ]
+    },
+    {
+        "id": "df186e48.b6803",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "DROP",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 110,
+        "y": 3760,
+        "wires": [
+            [
+                "ed25dbc1.307c58",
+                "a002ddb3.f5656"
+            ]
+        ]
+    },
+    {
+        "id": "a5d804d4.b649e8",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "CREATE HISTOGRAM",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP TABLE IF EXISTS bins; # be careful if you have a bins table of your own.\nCREATE TEMPORARY TABLE bins (\nminval INT, maxval INT, # or FLOAT, if needed\nKEY (minval), KEY (maxval) );# keys could perhaps help if using a lot of bins; normally negligible\n\nCALL makebins(20, NULL);  # Using 20 bins of automatic size here. \n\nSELECT bins.*, count(*) AS total FROM bins\nLEFT JOIN epower2 ON epower2.posedge BETWEEN bins.minval AND bins.maxval\nGROUP BY bins.minval;",
+        "output": "str",
+        "x": 350,
+        "y": 3840,
+        "wires": [
+            [
+                "485a7b16.315904"
+            ]
+        ]
+    },
+    {
+        "id": "d066011f.d11ea",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "HISTOGRAM",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 3840,
+        "wires": [
+            [
+                "a5d804d4.b649e8"
+            ]
+        ]
+    },
+    {
+        "id": "91e55855.ef4278",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "COMPOSE CHART",
+        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 4013,
+        "wires": [
+            [
+                "ff29ed54.2ffca",
+                "287af887.dee3b8"
+            ]
+        ]
+    },
+    {
+        "id": "ff29ed54.2ffca",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "GRAPH",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1100,
+        "y": 3933,
+        "wires": []
+    },
+    {
+        "id": "287af887.dee3b8",
+        "type": "ui_chart",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "group": "8399f10d.b5a3d",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "POSEDGE HISTOGRAM",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "auto",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "200",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 1230,
+        "y": 4013,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "74193bb.7571dc4",
+        "type": "split",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 130,
+        "y": 4013,
+        "wires": [
+            [
+                "e6471bfb.be3d08",
+                "8bb07a3.2929d88"
+            ]
+        ]
+    },
+    {
+        "id": "1c746983.59a2f6",
+        "type": "join",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 610,
+        "y": 4013,
+        "wires": [
+            [
+                "d3fbbe26.3ad1",
+                "91e55855.ef4278"
+            ]
+        ]
+    },
+    {
+        "id": "8bb07a3.2929d88",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "SELECT X & Y",
+        "func": "var myx = msg.payload.maxval;\n//var myy = msg.payload.cum_posedge;\n//var myy = msg.payload.cum_negedge;\nvar myy = msg.payload.total;\nmsg.payload = {};\nmsg.payload.x = myx;\nmsg.payload.y = myy;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 4013,
+        "wires": [
+            [
+                "1c746983.59a2f6",
+                "c7216cce.14704"
+            ]
+        ]
+    },
+    {
+        "id": "e6471bfb.be3d08",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMCCC",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 280,
+        "y": 3933,
+        "wires": []
+    },
+    {
+        "id": "c7216cce.14704",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMEEE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 600,
+        "y": 3933,
+        "wires": []
+    },
+    {
+        "id": "d3fbbe26.3ad1",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMGGG",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 770,
+        "y": 3933,
+        "wires": []
+    },
+    {
+        "id": "c8c4a8b5.53c4a8",
+        "type": "change",
+        "z": "2b73b789.bed1b8",
+        "name": "FILTER RESPONSE",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload[3]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 3840,
+        "wires": [
+            [
+                "74193bb.7571dc4"
+            ]
+        ]
+    },
+    {
+        "id": "212447d1.75ce68",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 322,
+        "y": 1562,
+        "wires": [
+            [
+                "d988a6a6.3462a8"
+            ]
+        ]
+    },
+    {
+        "id": "d988a6a6.3462a8",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 462,
+        "y": 1562,
+        "wires": [
+            [
+                "ffe5f991.0079d8"
+            ]
+        ]
+    },
+    {
+        "id": "f24647b1.dec0e8",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 830,
+        "y": 2680,
+        "wires": [
+            [
+                "bab5d5f8.be8db8"
+            ]
+        ]
+    },
+    {
+        "id": "bab5d5f8.be8db8",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 2680,
+        "wires": [
+            [
+                "754c1019.42877"
+            ]
+        ]
+    },
+    {
+        "id": "de0d430f.1621b",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 310,
+        "y": 1960,
+        "wires": [
+            [
+                "d1205b5e.775ba8"
+            ]
+        ]
+    },
+    {
+        "id": "d1205b5e.775ba8",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 450,
+        "y": 1960,
+        "wires": [
+            [
+                "1fb1b49f.06ee3b"
+            ]
+        ]
+    },
+    {
+        "id": "7ea6f288.c188bc",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 830,
+        "y": 4133,
+        "wires": [
+            [
+                "1774568b.8b7829"
+            ]
+        ]
+    },
+    {
+        "id": "1774568b.8b7829",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 4133,
+        "wires": [
+            [
+                "287af887.dee3b8"
+            ]
+        ]
+    },
+    {
+        "id": "35039a1b.1e3706",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 850,
+        "y": 2320,
+        "wires": [
+            [
+                "beb1ad3f.94e12"
+            ]
+        ]
+    },
+    {
+        "id": "beb1ad3f.94e12",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 990,
+        "y": 2320,
+        "wires": [
+            [
+                "59e8ee66.99ef8"
+            ]
+        ]
+    },
+    {
+        "id": "485a7b16.315904",
+        "type": "mysql",
+        "z": "2b73b789.bed1b8",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 660,
+        "y": 3840,
+        "wires": [
+            [
+                "c8c4a8b5.53c4a8"
+            ]
+        ]
+    },
+    {
+        "id": "a002ddb3.f5656",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "DROP PROCEDURE makebins",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP PROCEDURE makelogbins;",
+        "output": "str",
+        "x": 370,
+        "y": 3800,
+        "wires": [
+            [
+                "ff887eff.01d39"
+            ]
+        ]
+    },
+    {
+        "id": "a4591cb3.7850f",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "CREATE",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 120,
+        "y": 3640,
+        "wires": [
+            [
+                "dd0fb698.67d448"
+            ]
+        ]
+    },
+    {
+        "id": "dd0fb698.67d448",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "CREATE PROCEDURE makebins TRUNCATED LOG LOG Creation of BIN TABLE",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "CREATE PROCEDURE makebins(numbins INT, binsize FLOAT) # binsize may be NULL for auto-size\nBEGIN\n\n SET @binmin = LOG(40); # FOR TRUNCATED LOGBINS corresponding with a lower value of 10\n SET @binmax = LOG(80); # FOR TRUNCATED LOGBINS corresponding with a higher value of 500\n IF binsize IS NULL \n  THEN SET binsize = CEIL(@binmax-@binmin)/numbins; # CEIL here may prevent the potential creation a very small extra bin due to rounding errors, but no good where floats are needed.\n END IF;\n SET @currlim = @binmin;\n WHILE @currlim + binsize < @binmax DO\n  INSERT INTO bins VALUES (EXP(@currlim), EXP(@currlim+binsize));\n  SET @currlim = @currlim + binsize;\n END WHILE;\n INSERT INTO bins VALUES (EXP(@currlim), EXP(@maxbin));\nEND;",
+        "output": "str",
+        "x": 510,
+        "y": 3600,
+        "wires": [
+            [
+                "ff887eff.01d39"
+            ]
+        ]
+    },
+    {
+        "id": "658d88a2.7e4998",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "CREATE HISTOGRAM",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP TABLE IF EXISTS bins; # be careful if you have a bins table of your own.\nCREATE TEMPORARY TABLE bins (\nminval INT, maxval INT, # or FLOAT, if needed\nKEY (minval), KEY (maxval) );# keys could perhaps help if using a lot of bins; normally negligible\n\nCALL makebins(20, NULL);  # Using 20 bins of automatic size here. \n\nSELECT bins.*, count(*) AS total FROM bins\nLEFT JOIN epower2 ON epower2.negedge BETWEEN bins.minval AND bins.maxval\nGROUP BY bins.minval;",
+        "output": "str",
+        "x": 350,
+        "y": 4200,
+        "wires": [
+            [
+                "3c296b8d.5062e4"
+            ]
+        ]
+    },
+    {
+        "id": "56623992.9a1188",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "HISTOGRAM",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 130,
+        "y": 4200,
+        "wires": [
+            [
+                "658d88a2.7e4998"
+            ]
+        ]
+    },
+    {
+        "id": "19a89a4a.7e94b6",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "COMPOSE CHART",
+        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 4373,
+        "wires": [
+            [
+                "4d5f190b.47aa58",
+                "a0147f15.af01e"
+            ]
+        ]
+    },
+    {
+        "id": "4d5f190b.47aa58",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "GRAPH",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1100,
+        "y": 4293,
+        "wires": []
+    },
+    {
+        "id": "a0147f15.af01e",
+        "type": "ui_chart",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "group": "8399f10d.b5a3d",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "label": "NEGEDGE HISTOGRAM",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "auto",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "200",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 1230,
+        "y": 4373,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "82f9995.3ae2768",
+        "type": "split",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 130,
+        "y": 4373,
+        "wires": [
+            [
+                "dc7e5bf.35b4da8",
+                "fe2f39f5.54ae98"
+            ]
+        ]
+    },
+    {
+        "id": "f0aa738.469059",
+        "type": "join",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 610,
+        "y": 4373,
+        "wires": [
+            [
+                "7067826a.3c2a4c",
+                "19a89a4a.7e94b6"
+            ]
+        ]
+    },
+    {
+        "id": "fe2f39f5.54ae98",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "SELECT X & Y",
+        "func": "var myx = msg.payload.maxval;\n//var myy = msg.payload.cum_posedge;\n//var myy = msg.payload.cum_negedge;\nvar myy = msg.payload.total;\nmsg.payload = {};\nmsg.payload.x = myx;\nmsg.payload.y = myy;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 440,
+        "y": 4373,
+        "wires": [
+            [
+                "f0aa738.469059",
+                "928b5304.625e1"
+            ]
+        ]
+    },
+    {
+        "id": "dc7e5bf.35b4da8",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMCCC",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 280,
+        "y": 4293,
+        "wires": []
+    },
+    {
+        "id": "928b5304.625e1",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMEEE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 600,
+        "y": 4293,
+        "wires": []
+    },
+    {
+        "id": "7067826a.3c2a4c",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMGGG",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 770,
+        "y": 4293,
+        "wires": []
+    },
+    {
+        "id": "afd3759c.8d1b08",
+        "type": "change",
+        "z": "2b73b789.bed1b8",
+        "name": "FILTER RESPONSE",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload[3]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 900,
+        "y": 4200,
+        "wires": [
+            [
+                "82f9995.3ae2768"
+            ]
+        ]
+    },
+    {
+        "id": "21f630c5.a9a39",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 830,
+        "y": 4493,
+        "wires": [
+            [
+                "65deb0a9.c2ec2"
+            ]
+        ]
+    },
+    {
+        "id": "65deb0a9.c2ec2",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 970,
+        "y": 4493,
+        "wires": [
+            [
+                "a0147f15.af01e"
+            ]
+        ]
+    },
+    {
+        "id": "3c296b8d.5062e4",
+        "type": "mysql",
+        "z": "2b73b789.bed1b8",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 660,
+        "y": 4200,
+        "wires": [
+            [
+                "afd3759c.8d1b08"
+            ]
+        ]
+    },
+    {
+        "id": "d777709f.80fac",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "ANALYZE",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 80,
+        "y": 4560,
+        "wires": [
+            [
+                "22bdfb89.5bc744"
+            ]
+        ]
+    },
+    {
+        "id": "740cce11.56bc3",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "PEAK MATCHING",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT\n   DISTINCT up.power_id AS upid, up.timestamp AS uptime, up.posedge AS upedge, down.power_id AS downid, down.timestamp AS downtime, down.negedge AS downedge, TIMESTAMPDIFF(SECOND, up.timestamp, down.timestamp) AS duration, up.posedge*TIMESTAMPDIFF(SECOND, up.timestamp, down.timestamp)/3600000 AS kWh, SUM(up.posedge*TIMESTAMPDIFF(SECOND, up.timestamp, down.timestamp)/3600000) AS total_energy, COUNT(down.power_id) AS nrofdowns\n   FROM epower2 up, epower2 down\n   WHERE (up.power_id < down.power_id) AND (down.negedge > 50) AND (up.posedge > 50) AND ABS((up.posedge - down.negedge)/up.posedge) < 0.1\n   GROUP BY up.power_id\n   ORDER BY up.timestamp\n   ;",
+        "output": "str",
+        "x": 330,
+        "y": 4500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b6684b35.53fb58",
+        "type": "mysql",
+        "z": "2b73b789.bed1b8",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 560,
+        "y": 4620,
+        "wires": [
+            [
+                "6a590896.533c08",
+                "ac2247cc.f32628"
+            ]
+        ]
+    },
+    {
+        "id": "6a590896.533c08",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "ANALYSIS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 890,
+        "y": 4560,
+        "wires": []
+    },
+    {
+        "id": "ac2247cc.f32628",
+        "type": "change",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "erased",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 750,
+        "y": 4660,
+        "wires": [
+            [
+                "6058c0ce.d57c4",
+                "8ea4900f.fdb28"
+            ]
+        ]
+    },
+    {
+        "id": "6058c0ce.d57c4",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "ANALYSIS",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 970,
+        "y": 4640,
+        "wires": []
+    },
+    {
+        "id": "2af6211e.91bcbe",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "COMPOSE CHART",
+        "func": "var chart = [{}];\nchart[0].data =[];\nchart[0].data[0]= msg.payload;\nchart[0].series = [\"Serie_name\"];\nchart[0].labels = [\"Labels1\"];\nmsg.payload = chart;\nmsg.topic = \"Mytopic\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 950,
+        "y": 4820,
+        "wires": [
+            [
+                "e0729f4.14c976",
+                "fbe72e08.54ea9"
+            ]
+        ]
+    },
+    {
+        "id": "e0729f4.14c976",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "GRAPH",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1080,
+        "y": 4740,
+        "wires": []
+    },
+    {
+        "id": "fbe72e08.54ea9",
+        "type": "ui_chart",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "group": "8399f10d.b5a3d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "kWh per peak",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "D/M",
+        "interpolate": "step",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 1180,
+        "y": 4820,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "2890a0dc.571b1",
+        "type": "inject",
+        "z": "2b73b789.bed1b8",
+        "name": "RESET",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 810,
+        "y": 4940,
+        "wires": [
+            [
+                "ce55fc1c.c39a7"
+            ]
+        ]
+    },
+    {
+        "id": "ce55fc1c.c39a7",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "func": "msg.payload = [];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 950,
+        "y": 4940,
+        "wires": [
+            [
+                "fbe72e08.54ea9"
+            ]
+        ]
+    },
+    {
+        "id": "8ea4900f.fdb28",
+        "type": "split",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 150,
+        "y": 4840,
+        "wires": [
+            [
+                "c7084b62.240ab8",
+                "9a1dd7f2.5169d8"
+            ]
+        ]
+    },
+    {
+        "id": "1fb5cf9e.534a3",
+        "type": "join",
+        "z": "2b73b789.bed1b8",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 630,
+        "y": 4840,
+        "wires": [
+            [
+                "c5e2dec6.27525",
+                "2af6211e.91bcbe"
+            ]
+        ]
+    },
+    {
+        "id": "9a1dd7f2.5169d8",
+        "type": "function",
+        "z": "2b73b789.bed1b8",
+        "name": "SELECT X & Y",
+        "func": "var myx = msg.payload.uptime;\n//var myy = msg.payload.cum_posedge;\n//var myy = msg.payload.cum_negedge;\nvar myy = msg.payload.kWh;\nmsg.payload = {};\nmsg.payload.x = myx;\nmsg.payload.y = myy;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 460,
+        "y": 4840,
+        "wires": [
+            [
+                "1fb5cf9e.534a3",
+                "2f734ffd.858a1"
+            ]
+        ]
+    },
+    {
+        "id": "c7084b62.240ab8",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMCCC",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 300,
+        "y": 4760,
+        "wires": []
+    },
+    {
+        "id": "2f734ffd.858a1",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMEEE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 620,
+        "y": 4760,
+        "wires": []
+    },
+    {
+        "id": "c5e2dec6.27525",
+        "type": "debug",
+        "z": "2b73b789.bed1b8",
+        "name": "CUMGGG",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 790,
+        "y": 4760,
+        "wires": []
+    },
+    {
+        "id": "3c35f2ec.f40e2e",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "PEAK MATCHING",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT\n   DISTINCT up.power_id AS upid, up.timestamp AS uptime, up.posedge AS upedge, down.power_id AS downid, down.timestamp AS downtime, down.negedge AS downedge, TIMESTAMPDIFF(SECOND, up.timestamp, down.timestamp) AS duration, up.posedge*TIMESTAMPDIFF(SECOND, up.timestamp, down.timestamp)/3600000 AS kWh, SUM(up.posedge*TIMESTAMPDIFF(SECOND, up.timestamp, down.timestamp)/3600000) AS total_energy, COUNT(down.power_id) AS nrofdowns\n   FROM epower2 up, epower2 down\n   WHERE (up.power_id < down.power_id) AND (down.negedge > 50) AND (up.posedge > 50) AND ABS((up.posedge - down.negedge)/up.posedge) < 0.1\n   GROUP BY up.power_id\n   ORDER BY up.timestamp\n   ;",
+        "output": "str",
+        "x": 330,
+        "y": 4440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b37c772b.98bc18",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "PEAK MATCHING preselection",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT\n   up.power_id AS upid, down.power_id AS downid \n   FROM epower2 up, epower2 down\n   WHERE (down.power_id > up.power_id) AND (down.power_id - up.power_id < 120) AND (up.posedge > 30) AND (down.negedge > 30)\n   LIMIT 10000\n   ;",
+        "output": "str",
+        "x": 330,
+        "y": 4560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "22bdfb89.5bc744",
+        "type": "template",
+        "z": "2b73b789.bed1b8",
+        "name": "PEAK MATCHING fine selection",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT * FROM \n    (SELECT\n        up.power_id AS upid, down.power_id AS downid, up.posedge AS upedge, down.negedge AS negedge \n        FROM epower2 up, epower2 down\n        WHERE (down.power_id > up.power_id) AND (down.power_id - up.power_id < 120) AND (up.posedge > 30) AND (down.negedge > 30) \n        AND ABS(up.posedge-down.negedge)/up.posedge < 0.1  \n   LIMIT 10000 ) AS preselect\n   ;",
+        "output": "str",
+        "x": 310,
+        "y": 4680,
+        "wires": [
+            [
+                "b6684b35.53fb58"
+            ]
+        ]
+    },
+    {
+        "id": "e4665e3.8d322a",
+        "type": "template",
+        "z": "8677ca10.1eb128",
+        "name": "DELETE FROM tsensors  7 DAY",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DELETE FROM tsensors WHERE datetime < DATE_SUB(NOW(), INTERVAL 7 DAY) ;  ",
+        "output": "str",
+        "x": 370,
+        "y": 1580,
+        "wires": [
+            [
+                "c8dd868f.654b38"
+            ]
+        ]
+    },
+    {
+        "id": "60c6c595.69e5dc",
+        "type": "debug",
+        "z": "8677ca10.1eb128",
+        "name": "CCCCCC",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 820,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "c8dd868f.654b38",
+        "type": "mysql",
+        "z": "8677ca10.1eb128",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 640,
+        "y": 1580,
+        "wires": [
+            [
+                "60c6c595.69e5dc"
+            ]
+        ]
+    },
+    {
+        "id": "c312fc3c.632c",
+        "type": "inject",
+        "z": "8677ca10.1eb128",
+        "name": "DELETE",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "3600",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 140,
+        "y": 1520,
+        "wires": [
+            [
+                "e4665e3.8d322a"
+            ]
+        ]
+    },
+    {
+        "id": "61e769af.054438",
+        "type": "template",
+        "z": "8677ca10.1eb128",
+        "name": "LINEAIRE FIT laaste 20 readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT \n    @n := COUNT(*) AS N,\n    @meanX := AVG(UNIX_TIMESTAMP(datetime)) AS 'X mean',\n    @sumX  := SUM(UNIX_TIMESTAMP(datetime)) AS 'X sum',\n    @sumXX := SUM(UNIX_TIMESTAMP(datetime)*UNIX_TIMESTAMP(datetime)) AS 'XX sum',\n    @meanY := AVG(temperature) AS 'Y mean',\n    @sumY  := SUM(temperature) AS 'Y sum',\n    @sumYY := SUM(temperature*temperature) AS 'YY sum',\n    @sumXY := SUM(temperature*UNIX_TIMESTAMP(datetime)) AS 'XY sum'\n    \n \n\nFROM tsensors\nWHERE   sensor_id = \"10-000802541aac\"\n        AND datetime > DATE_SUB(NOW(), INTERVAL 10 MINUTE)\n;\n\n    SET @a := (@n*@sumXY-@sumX*@sumY)/(@n*@sumXX-@sumX*@sumX);\n    SET @b := (@meanY-@a*@meanX);\n    SELECT @a AS slope, @b AS intercept;\n    SELECT (@n*@sumXY-@sumX*@sumY)\n    /SQRT((@n*@sumXX-@sumX*@sumX)*(@n*@sumYY-@sumY*@sumY))\n    AS correlation;\n    \nSELECT \n    temperature as observed, @a*UNIX_TIMESTAMP(datetime) + @b AS prediction \n FROM tsensors\nWHERE   sensor_id = \"10-000802541aac\"\n        AND datetime > DATE_SUB(NOW(), INTERVAL 10 MINUTE)\n;\n \n    ",
+        "output": "str",
+        "x": 360,
+        "y": 1720,
+        "wires": [
+            [
+                "3001571d.fadcd8"
+            ]
+        ]
+    },
+    {
+        "id": "9555a6a9.f90be8",
+        "type": "inject",
+        "z": "8677ca10.1eb128",
+        "name": "FIT",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 110,
+        "y": 1720,
+        "wires": [
+            [
+                "61e769af.054438"
+            ]
+        ]
+    },
+    {
+        "id": "3001571d.fadcd8",
+        "type": "mysql",
+        "z": "8677ca10.1eb128",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 680,
+        "y": 1720,
+        "wires": [
+            [
+                "3893732e.37911c"
+            ]
+        ]
+    },
+    {
+        "id": "3893732e.37911c",
+        "type": "debug",
+        "z": "8677ca10.1eb128",
+        "name": "FIT results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 890,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "c284c039.9d50c",
+        "type": "template",
+        "z": "8677ca10.1eb128",
+        "name": "LINEAIRE FIT laaste 1 readings",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT UNIX_TIMESTAMP(datetime) AS x, temperature AS y\nFROM tsensors\nWHERE   sensor_id = \"10-000802541aac\"\n        AND datetime > DATE_SUB(NOW(), INTERVAL 1 MINUTE)\n        ;",
+        "output": "str",
+        "x": 570,
+        "y": 1820,
+        "wires": [
+            [
+                "13a210a0.25189f"
+            ]
+        ]
+    },
+    {
+        "id": "13a210a0.25189f",
+        "type": "mysql",
+        "z": "8677ca10.1eb128",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 840,
+        "y": 1820,
+        "wires": [
+            [
+                "aa609e4a.15245"
+            ]
+        ]
+    },
+    {
+        "id": "165e42ed.24544d",
+        "type": "inject",
+        "z": "8677ca10.1eb128",
+        "name": "FIT",
+        "topic": "",
+        "payload": "\"\"",
+        "payloadType": "str",
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 130,
+        "y": 1800,
+        "wires": [
+            [
+                "c284c039.9d50c"
+            ]
+        ]
+    },
+    {
+        "id": "aa609e4a.15245",
+        "type": "split",
+        "z": "8677ca10.1eb128",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1030,
+        "y": 1820,
+        "wires": [
+            [
+                "1ab6da94.024465",
+                "d1ddfd73.ddf85"
+            ]
+        ]
+    },
+    {
+        "id": "1ab6da94.024465",
+        "type": "debug",
+        "z": "8677ca10.1eb128",
+        "name": "DATA",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1070,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "d1ddfd73.ddf85",
+        "type": "regression",
+        "z": "8677ca10.1eb128",
+        "name": "",
+        "dataSetSize": "6",
+        "regressionType": "linear",
+        "polynomialOrder": 2,
+        "precision": "10",
+        "xInputField": "payload.x",
+        "xInputFieldType": "msg",
+        "yInputField": "payload.y",
+        "yInputFieldType": "msg",
+        "yOutputField": "payload.yfit",
+        "yOutputFieldType": "msg",
+        "functionOutputField": "output",
+        "functionOutputFieldType": "msg",
+        "resultOnly": false,
+        "x": 610,
+        "y": 1958,
+        "wires": [
+            [
+                "940e83ce.38654",
+                "9c7a475b.f1b998"
+            ]
+        ]
+    },
+    {
+        "id": "940e83ce.38654",
+        "type": "debug",
+        "z": "8677ca10.1eb128",
+        "name": "FIT results 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 810,
+        "y": 1958,
+        "wires": []
+    },
+    {
+        "id": "36d69903.266e56",
+        "type": "inject",
+        "z": "8677ca10.1eb128",
+        "name": "CLEAR",
+        "topic": "",
+        "payload": "\"\"",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 310,
+        "y": 1998,
+        "wires": [
+            [
+                "d1ddfd73.ddf85"
+            ]
+        ]
+    },
+    {
+        "id": "9c7a475b.f1b998",
+        "type": "change",
+        "z": "8677ca10.1eb128",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "output.equation[0]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 740,
+        "y": 2098,
+        "wires": [
+            [
+                "abec1e2c.660ff",
+                "d8bf8fb5.fbf17"
+            ]
+        ]
+    },
+    {
+        "id": "abec1e2c.660ff",
+        "type": "debug",
+        "z": "8677ca10.1eb128",
+        "name": "Slope",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 910,
+        "y": 2078,
+        "wires": []
+    },
+    {
+        "id": "d8bf8fb5.fbf17",
+        "type": "ui_chart",
+        "z": "8677ca10.1eb128",
+        "name": "",
+        "group": "fc44179e.3559c8",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "Slope",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "24",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "x": 920,
+        "y": 2138,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "9c02ecb.9231c1",
+        "type": "inject",
+        "z": "8677ca10.1eb128",
+        "name": "CLEAR",
+        "topic": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 590,
+        "y": 2138,
+        "wires": [
+            [
+                "d8bf8fb5.fbf17"
+            ]
+        ]
+    },
+    {
+        "id": "2342e87e.b7cc18",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE DATA",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 250,
+        "y": 80,
+        "wires": [
+            [
+                "3310e6c3.7443da"
+            ]
+        ]
+    },
+    {
+        "id": "3310e6c3.7443da",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE GAUSSIAN RANDOM NRS",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "INSERT INTO gaussian1 (dev)\nSELECT x*SQRT(-2*LOG(s)/s) as n FROM\n \n (\n SELECT x,\n        y,\n        x*x+y*y AS s\n FROM\n \n (SELECT\n    2 * rand() - 1 as x,\n    2 * rand() - 1 as y\n  from seq_1_to_10000\n  AS numbers)\n  AS polar_points\n   WHERE x*x+y*y<1\n  ) AS marsagliax\n  \n  UNION  SELECT y*SQRT(-2*LOG(s)/s) as n FROM\n \n (\n SELECT x,\n        y,\n        x*x+y*y AS s\n FROM\n \n (SELECT\n    2 * rand() - 1 as x,\n    2 * rand() - 1 as y\n  from seq_1_to_10\n  AS numbers)\n  AS polar_points\n   WHERE x*x+y*y<1\n  ) \n  \n  AS marsagliay\n\n   ;",
+        "output": "str",
+        "x": 580,
+        "y": 80,
+        "wires": [
+            [
+                "6caac009.ba189"
+            ]
+        ]
+    },
+    {
+        "id": "d02fd6ac.576b58",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE X, Yfit",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 1110,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fd97f1d7.0c66f",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "FIT linear y= ax+b",
+        "info": "",
+        "x": 910,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "9043a01a.2d27b",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE X, residue",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "This is the payload: {{payload}} !",
+        "output": "str",
+        "x": 1100,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6caac009.ba189",
+        "type": "mysql",
+        "z": "cd6789e6.ff3648",
+        "mydb": "f524d036.2b55a",
+        "name": "",
+        "x": 890,
+        "y": 120,
+        "wires": [
+            [
+                "8b608236.9abc4"
+            ]
+        ]
+    },
+    {
+        "id": "8b608236.9abc4",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1030,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "67efd0ce.ebf1c",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "FIT non-inear y= f(x; a,b)",
+        "info": "",
+        "x": 630,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "407b0902.f66168",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "FIT inear y-f0(x,a0,b0) vs df/da*Xaux + df/db",
+        "info": "",
+        "x": 690,
+        "y": 1567,
+        "wires": []
+    },
+    {
+        "id": "29c39d26.a576f2",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "Result: delta a, delta b",
+        "info": "",
+        "x": 760,
+        "y": 1607,
+        "wires": []
+    },
+    {
+        "id": "2062224f.e3875e",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "REPEAT until delta a and delta b very small",
+        "info": "",
+        "x": 1100,
+        "y": 1627,
+        "wires": []
+    },
+    {
+        "id": "40e1c3ba.e47afc",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "CALCULATE  y - ycalc",
+        "info": "",
+        "x": 760,
+        "y": 1467,
+        "wires": []
+    },
+    {
+        "id": "3b04a674.9ba02a",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "CALCULATE Xaux",
+        "info": "",
+        "x": 770,
+        "y": 1507,
+        "wires": []
+    },
+    {
+        "id": "838ad30c.8b40c",
+        "type": "regression",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "dataSetSize": "",
+        "regressionType": "linear",
+        "polynomialOrder": 2,
+        "precision": "10",
+        "xInputField": "payload.x",
+        "xInputFieldType": "msg",
+        "yInputField": "payload.y",
+        "yInputFieldType": "msg",
+        "yOutputField": "payload.yfit",
+        "yOutputFieldType": "msg",
+        "functionOutputField": "output",
+        "functionOutputFieldType": "msg",
+        "resultOnly": false,
+        "x": 1430,
+        "y": 1040,
+        "wires": [
+            [
+                "eac082a9.2f327"
+            ]
+        ]
+    },
+    {
+        "id": "eac082a9.2f327",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "FIT results 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1650,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "2f099eae.3e5b32",
+        "type": "counter",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "init": "-1",
+        "step": "1",
+        "lower": "0",
+        "upper": "",
+        "mode": "increment",
+        "outputs": 2,
+        "x": 680,
+        "y": 820,
+        "wires": [
+            [
+                "20fb9e56.9a6552",
+                "6e4caa68.924834"
+            ],
+            [
+                "244b1816.eeab38"
+            ]
+        ]
+    },
+    {
+        "id": "244b1816.eeab38",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 750,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "20fb9e56.9a6552",
+        "type": "range",
+        "z": "cd6789e6.ff3648",
+        "minin": "0",
+        "maxin": "1",
+        "minout": "0",
+        "maxout": "0.01",
+        "action": "scale",
+        "round": false,
+        "property": "payload",
+        "name": "Generate x :  xstart, xend",
+        "x": 910,
+        "y": 860,
+        "wires": [
+            [
+                "83573b09.3a9148",
+                "396089b6.060566"
+            ]
+        ]
+    },
+    {
+        "id": "83573b09.3a9148",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "X",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1010,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "992adcd6.c71e4",
+        "type": "looptimer",
+        "z": "cd6789e6.ff3648",
+        "duration": "0.1",
+        "units": "Second",
+        "maxloops": "5",
+        "maxtimeout": "1",
+        "maxtimeoutunits": "Hour",
+        "name": "5 repeats",
+        "x": 260,
+        "y": 860,
+        "wires": [
+            [
+                "5667f33b.6f058c"
+            ],
+            [
+                "4f47adac.b1e9d4"
+            ]
+        ]
+    },
+    {
+        "id": "b80a6141.eeebd",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 160,
+        "y": 820,
+        "wires": [
+            [
+                "992adcd6.c71e4"
+            ]
+        ]
+    },
+    {
+        "id": "4f47adac.b1e9d4",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 410,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "8ae24345.66b6d",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 550,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "5667f33b.6f058c",
+        "type": "switch",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "property": "_timerpass",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 410,
+        "y": 840,
+        "wires": [
+            [
+                "8ae24345.66b6d",
+                "2f099eae.3e5b32"
+            ],
+            [
+                "c80e742a.cdc748"
+            ]
+        ]
+    },
+    {
+        "id": "c80e742a.cdc748",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 550,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "697ea351.59c0cc",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE GAUSSIAN RANDOM NRS",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "CREATE TABLE IF NOT EXISTS gaussian1  (dev_id INT NOT NULL AUTO_INCREMENT, dev FLOAT, PRIMARY KEY (dev_id));",
+        "output": "str",
+        "x": 580,
+        "y": 40,
+        "wires": [
+            [
+                "2c707076.f0f64"
+            ]
+        ]
+    },
+    {
+        "id": "d050722c.5035b",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "CREATE TABLE gaussian1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 230,
+        "y": 40,
+        "wires": [
+            [
+                "697ea351.59c0cc"
+            ]
+        ]
+    },
+    {
+        "id": "2c707076.f0f64",
+        "type": "mysql",
+        "z": "cd6789e6.ff3648",
+        "mydb": "f524d036.2b55a",
+        "name": "",
+        "x": 890,
+        "y": 40,
+        "wires": [
+            [
+                "df874c29.eb26d"
+            ]
+        ]
+    },
+    {
+        "id": "df874c29.eb26d",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1030,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "4dbe013c.6eae5",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "DROP TABLE gaussian1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 230,
+        "y": 120,
+        "wires": [
+            [
+                "1fd9618b.fe310e"
+            ]
+        ]
+    },
+    {
+        "id": "b877c318.9a8ce",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "LIST TABLE gaussian1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 240,
+        "y": 160,
+        "wires": [
+            [
+                "1686ab19.c6fa85"
+            ]
+        ]
+    },
+    {
+        "id": "1fd9618b.fe310e",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "DROP TABLE gaussian1",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP TABLE gaussian1;",
+        "output": "str",
+        "x": 530,
+        "y": 120,
+        "wires": [
+            [
+                "6caac009.ba189"
+            ]
+        ]
+    },
+    {
+        "id": "1686ab19.c6fa85",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE GAUSSIAN RANDOM NRS",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT * FROM gaussian1;\n",
+        "output": "str",
+        "x": 580,
+        "y": 160,
+        "wires": [
+            [
+                "6caac009.ba189"
+            ]
+        ]
+    },
+    {
+        "id": "1f3d5f41.ddb411",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "MSG",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1190,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "6e4caa68.924834",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "COUNTER",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 870,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "396089b6.060566",
+        "type": "function",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "func": "var myx = msg.payload;\n\nmsg.payload = {\"x\": myx, y:null, dev:null};\nvar a = 5;\nvar b = 3;\nmsg.payload.y  = a * msg.payload.x + b\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1150,
+        "y": 860,
+        "wires": [
+            [
+                "1f3d5f41.ddb411",
+                "efb559d7.d0df98"
+            ]
+        ]
+    },
+    {
+        "id": "a46a8c9e.49ee7",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 200,
+        "y": 1040,
+        "wires": [
+            [
+                "838ad30c.8b40c"
+            ]
+        ]
+    },
+    {
+        "id": "efb559d7.d0df98",
+        "type": "random",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "low": "0",
+        "high": "1",
+        "inte": "false",
+        "property": "payload.dev",
+        "x": 1320,
+        "y": 860,
+        "wires": [
+            [
+                "a9ea1cf0.fb211",
+                "af0096f4.f7e068"
+            ]
+        ]
+    },
+    {
+        "id": "a9ea1cf0.fb211",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "MSGA",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1490,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "af0096f4.f7e068",
+        "type": "function",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "func": "\nmsg.payload.y  = msg.payload.y + 0.001*(2*msg.payload.dev -1);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1490,
+        "y": 920,
+        "wires": [
+            [
+                "838ad30c.8b40c",
+                "2e02b6e4.932bca",
+                "638eeac1.5b6514"
+            ]
+        ]
+    },
+    {
+        "id": "2e02b6e4.932bca",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "MSGB",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1630,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "5f7cb5b1.18b69c",
+        "type": "comment",
+        "z": "cd6789e6.ff3648",
+        "name": "Gnerate x,y data",
+        "info": "",
+        "x": 700,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "1cce4880.bbc9a8",
+        "type": "mysql",
+        "z": "cd6789e6.ff3648",
+        "mydb": "f524d036.2b55a",
+        "name": "",
+        "x": 890,
+        "y": 320,
+        "wires": [
+            [
+                "beb04ef0.0d686"
+            ]
+        ]
+    },
+    {
+        "id": "beb04ef0.0d686",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1030,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "360a0ed6.b7d2d2",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "GENERATE GAUSSIAN RANDOM NRS",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "CREATE TABLE IF NOT EXISTS xydata  (xy_id INT NOT NULL AUTO_INCREMENT, x FLOAT, y FLOAT, PRIMARY KEY (xy_id));",
+        "output": "str",
+        "x": 580,
+        "y": 240,
+        "wires": [
+            [
+                "8ed762b3.1b5f7"
+            ]
+        ]
+    },
+    {
+        "id": "c17171f.b9b4c9",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "CREATE TABLE xydata",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 220,
+        "y": 240,
+        "wires": [
+            [
+                "360a0ed6.b7d2d2"
+            ]
+        ]
+    },
+    {
+        "id": "8ed762b3.1b5f7",
+        "type": "mysql",
+        "z": "cd6789e6.ff3648",
+        "mydb": "f524d036.2b55a",
+        "name": "",
+        "x": 890,
+        "y": 240,
+        "wires": [
+            [
+                "f9e6692e.8e4788"
+            ]
+        ]
+    },
+    {
+        "id": "f9e6692e.8e4788",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1030,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "cf896c1.59f659",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "DROP TABLE xydata",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 220,
+        "y": 320,
+        "wires": [
+            [
+                "3be1646b.8078dc"
+            ]
+        ]
+    },
+    {
+        "id": "3be1646b.8078dc",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "DROP TABLE gaussian1",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "DROP TABLE xydata;",
+        "output": "str",
+        "x": 530,
+        "y": 320,
+        "wires": [
+            [
+                "1cce4880.bbc9a8"
+            ]
+        ]
+    },
+    {
+        "id": "638eeac1.5b6514",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "STORE xydata in TABLE",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "INSERT INTO xydata  (x , y) VALUES({{payload.x}},{{payload.y}});",
+        "output": "str",
+        "x": 570,
+        "y": 1100,
+        "wires": [
+            [
+                "314a4bbc.e28304"
+            ]
+        ]
+    },
+    {
+        "id": "314a4bbc.e28304",
+        "type": "mysql",
+        "z": "cd6789e6.ff3648",
+        "mydb": "f524d036.2b55a",
+        "name": "",
+        "x": 790,
+        "y": 1100,
+        "wires": [
+            [
+                "484dbae7.13bbc4"
+            ]
+        ]
+    },
+    {
+        "id": "484dbae7.13bbc4",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "DATABASE",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 1010,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "dcdd6b6e.54b368",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "LIST xydata",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT * FROM xydata;",
+        "output": "str",
+        "x": 530,
+        "y": 1160,
+        "wires": [
+            [
+                "314a4bbc.e28304"
+            ]
+        ]
+    },
+    {
+        "id": "62e42016.6adca",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 260,
+        "y": 1160,
+        "wires": [
+            [
+                "dcdd6b6e.54b368"
+            ]
+        ]
+    },
+    {
+        "id": "6822ebbe.702824",
+        "type": "mysql",
+        "z": "cd6789e6.ff3648",
+        "mydb": "f524d036.2b55a",
+        "name": "MYSQL db example ",
+        "x": 680,
+        "y": 1280,
+        "wires": [
+            [
+                "d51fcd5e.6df23"
+            ]
+        ]
+    },
+    {
+        "id": "470c6e92.4012a",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "LINEAIRE FIT xydata",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT \n    @n := COUNT(*) AS N,\n    @meanX := AVG(x) AS 'X mean',\n    @sumX  := SUM(x) AS 'X sum',\n    @sumXX := SUM(x*x) AS 'XX sum',\n    @meanY := AVG(y) AS 'Y mean',\n    @sumY  := SUM(y) AS 'Y sum',\n    @sumYY := SUM(y*y) AS 'YY sum',\n    @sumXY := SUM(x*y) AS 'XY sum'\n\nFROM xydata;\n\nSELECT @a := (@n*@sumXY-@sumX*@sumY)/(@n*@sumXX-@sumX*@sumX) AS slope, @b := (@meanY-@a*@meanX)  AS intercept, (@n*@sumXY-@sumX*@sumY)\n    /SQRT((@n*@sumXX-@sumX*@sumX)*(@n*@sumYY-@sumY*@sumY))\n    AS correlation;\n\n \n    ",
+        "output": "str",
+        "x": 420,
+        "y": 1280,
+        "wires": [
+            [
+                "6822ebbe.702824"
+            ]
+        ]
+    },
+    {
+        "id": "d51fcd5e.6df23",
+        "type": "debug",
+        "z": "cd6789e6.ff3648",
+        "name": "FIT results",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 890,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "2d1706be.d6eb5a",
+        "type": "inject",
+        "z": "cd6789e6.ff3648",
+        "name": "FIT",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "x": 230,
+        "y": 1280,
+        "wires": [
+            [
+                "470c6e92.4012a"
+            ]
+        ]
+    },
+    {
+        "id": "48f54793.9653c8",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "LINEAIRE FIT xydata",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT \n    @n := COUNT(*) AS N,\n    @meanX := AVG(x) AS 'X mean',\n    @sumX  := SUM(x) AS 'X sum',\n    @sumXX := SUM(x*x) AS 'XX sum',\n    @meanY := AVG(y) AS 'Y mean',\n    @sumY  := SUM(y) AS 'Y sum',\n    @sumYY := SUM(y*y) AS 'YY sum',\n    @sumXY := SUM(x*y) AS 'XY sum'\n\nFROM xydata;\n\n    SET @a := (@n*@sumXY-@sumX*@sumY)/(@n*@sumXX-@sumX*@sumX);\n    SET @b := (@meanY-@a*@meanX);\n    SELECT @a AS slope, @b AS intercept, (@n*@sumXY-@sumX*@sumY)\n    /SQRT((@n*@sumXX-@sumX*@sumX)*(@n*@sumYY-@sumY*@sumY))\n    AS correlation;\n\n \n    ",
+        "output": "str",
+        "x": 420,
+        "y": 1240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "774ee67c.134578",
+        "type": "template",
+        "z": "cd6789e6.ff3648",
+        "name": "LINEAIRE FIT xydata",
+        "field": "topic",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "SELECT    \n    @nn := @n*1 AS NN,\n    @a := (@n*@sumXY-@sumX*@sumY)/(@n*@sumXX-@sumX*@sumX) AS slope, \n    @b := (@meanY-@a*@meanX)  AS intercept, \n    @rr := (@n*@sumXY-@sumX*@sumY)/SQRT((@n*@sumXX-@sumX*@sumX)*(@n*@sumYY-@sumY*@sumY)) AS correlation\nFROM\n    (SELECT \n    @n := COUNT(*) AS N,\n    @meanX := AVG(x) AS 'X mean',\n    @sumX  := SUM(x) AS 'X sum',\n    @sumXX := SUM(x*x) AS 'XX sum',\n    @meanY := AVG(y) AS 'Y mean',\n    @sumY  := SUM(y) AS 'Y sum',\n    @sumYY := SUM(y*y) AS 'YY sum',\n    @sumXY := SUM(x*y) AS 'XY sum'\nFROM xydata) AS intermediates\n;\n\n\n \n    ",
+        "output": "str",
+        "x": 423,
+        "y": 1320,
+        "wires": [
+            []
         ]
     }
 ]
